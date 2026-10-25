@@ -9,76 +9,78 @@
 <style>
 :root{--bg:#06070d;--card:#121420;--cyan:#00f3ff;--pink:#ff007f;--purple:#9d00ff;--muted:#8b949e}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:#f0f4f8;font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+html, body { height: 100vh; overflow: hidden; background: var(--bg); color: #f0f4f8; font-family: 'Plus Jakarta Sans', sans-serif; }
 
 #bg-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
 
-.app{position:relative;z-index:1;max-width:1150px;margin:auto;padding:16px;display:flex;flex-direction:column;min-height:100vh}
+.app{position:relative;z-index:1;max-width:1150px;height:100vh;margin:auto;padding:12px;display:flex;flex-direction:column;overflow:hidden}
 
-header,.panel{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:16px;margin-bottom:16px;backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,0.5)}
-header{display:flex;justify-content:space-between;align-items:center}
-h1{font:900 1.25rem Orbitron,sans-serif;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:12px 18px;margin-bottom:12px;backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+h1{font:900 1.2rem Orbitron,sans-serif;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-button{cursor:pointer;border:0;border-radius:12px;padding:10px 16px;color:white;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--purple));transition:0.3s}
+button{cursor:pointer;border:0;border-radius:10px;padding:8px 14px;color:white;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--purple));transition:0.3s}
 button:hover{opacity:0.9}
-input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:#090a12;color:white;font:inherit;outline:none}
+input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#090a12;color:white;font:inherit;outline:none}
 input:focus{border-color:var(--cyan)}
 
-.search-box{display:flex;gap:10px;margin-bottom:10px}
-.tabs{display:flex;gap:10px;margin-bottom:12px}
-.tab-btn{flex:1;background:rgba(255,255,255,0.04);color:var(--muted);font-size:0.8rem;padding:8px;border-radius:10px}
+.search-box{display:flex;gap:8px;margin-bottom:8px}
+.tabs{display:flex;gap:8px;margin-bottom:10px}
+.tab-btn{flex:1;background:rgba(255,255,255,0.04);color:var(--muted);font-size:0.78rem;padding:6px;border-radius:8px}
 .tab-btn.active{background:var(--cyan);color:#000;font-weight:800}
 
-.layout{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start}
+.layout{display:grid;grid-template-columns:1fr 350px;gap:14px;flex:1;min-height:0;align-items:stretch}
+.panel{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 
-/* Fixed Results Column to prevent layout breaking */
-.results-container{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px}
+/* Results Column inside panel */
+.results-container{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px;min-height:0}
 .results-container::-webkit-scrollbar{width:4px}
 .results-container::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:4px}
 
 .track{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid rgba(255,255,255,0.05);border-radius:10px;cursor:pointer;background:rgba(255,255,255,0.02);flex-shrink:0}
 .track:hover{border-color:var(--cyan);background:rgba(255,255,255,0.06)}
-.track img{width:70px;height:48px;object-fit:cover;border-radius:6px;flex-shrink:0}
+.track img{width:65px;height:45px;object-fit:cover;border-radius:6px;flex-shrink:0}
 .info{flex:1;min-width:0}
-.title{font-weight:700;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.author{font-size:0.7rem;color:var(--muted)}
-.save-track-btn{background:none;color:var(--muted);padding:6px;font-size:1rem}
+.title{font-weight:700;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.author{font-size:0.68rem;color:var(--muted)}
+.save-track-btn{background:none;color:var(--muted);padding:4px;font-size:0.95rem}
 .save-track-btn.saved{color:var(--pink)}
 
-/* Player Panel Layout Fixed */
-.player{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:space-between}
-#player-title{font-weight:700;font-size:0.9rem;margin:6px 0 2px;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#player-author{color:var(--muted);font-size:0.75rem;margin-bottom:8px}
+/* Player Panel */
+.player{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow-y:auto}
+#player-title{font-weight:700;font-size:0.88rem;margin:4px 0 2px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#player-author{color:var(--muted);font-size:0.72rem;margin-bottom:6px}
 
-/* Unified Media Container (Switches between Square Cover & Widescreen Video smoothly) */
-.media-container{width:160px;height:160px;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);margin:6px auto 10px;box-shadow:0 8px 20px rgba(0,0,0,0.6);transition:all 0.3s ease;position:relative;background:#000;flex-shrink:0}
-.media-container.video-mode{width:100%;aspect-ratio:16/9;height:auto;border-radius:12px}
+/* Clean Video Mode & Cover Container */
+.media-container{width:140px;height:140px;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);margin:4px auto 8px;box-shadow:0 6px 15px rgba(0,0,0,0.6);transition:all 0.3s ease;position:relative;background:#000;flex-shrink:0}
+.media-container.video-mode{width:100%;aspect-ratio:16/9;height:auto;border-radius:10px}
 .media-container img{width:100%;height:100%;object-fit:cover}
 
 /* Synced Lyrics Box */
-.lyrics-box{width:100%;height:85px;overflow-y:auto;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:8px;font-size:0.75rem;color:var(--muted);margin-bottom:10px;text-align:center;line-height:1.5;scroll-behavior:smooth}
+.lyrics-box{width:100%;height:75px;overflow-y:auto;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px;font-size:0.72rem;color:var(--muted);margin-bottom:8px;text-align:center;line-height:1.4;scroll-behavior:smooth;flex-shrink:0}
 .lyrics-box::-webkit-scrollbar{width:3px}
 .lyrics-box::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:3px}
-.lyric-line{transition:0.3s;margin:3px 0}
-.lyric-line.active{color:var(--cyan);font-weight:700;transform:scale(1.03)}
+.lyric-line{transition:0.3s;margin:2px 0}
+.lyric-line.active{color:var(--cyan);font-weight:700;transform:scale(1.02)}
 
-.progress-wrap{width:100%;margin-bottom:8px}
+.progress-wrap{width:100%;margin-bottom:6px;flex-shrink:0}
 #progress{width:100%;accent-color:var(--cyan);cursor:pointer}
-.times{display:flex;justify-content:space-between;color:var(--muted);font-size:0.7rem;margin-top:3px}
+.times{display:flex;justify-content:space-between;color:var(--muted);font-size:0.68rem;margin-top:2px}
 
-.controls{display:flex;justify-content:center;align-items:center;gap:12px;margin:8px 0}
-.ctrl-btn{background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer}
-#play{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));font-size:1rem;display:flex;align-items:center;justify-content:center}
+.controls{display:flex;justify-content:center;align-items:center;gap:10px;margin:4px 0;flex-shrink:0}
+.ctrl-btn{background:none;border:none;color:#fff;font-size:1rem;cursor:pointer}
+#play{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));font-size:0.9rem;display:flex;align-items:center;justify-content:center}
 
 .secondary{background:#29243c}
 .secondary:hover{background:#3b3254}
 
-.dl-btn{width:100%;margin-top:4px;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.8rem;padding:10px}
+.dl-btn{width:100%;margin-top:4px;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.78rem;padding:8px;flex-shrink:0}
 
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;z-index:100}
-.modal-content{background:var(--card);border:1px solid var(--purple);border-radius:20px;padding:22px;max-width:340px;text-align:center;position:relative}
+.modal-content{background:var(--card);border:1px solid var(--purple);border-radius:18px;padding:20px;max-width:320px;text-align:center;position:relative}
 
-@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:10px}}
+#yt-background-container{position:fixed;bottom:0;left:0;width:1px;height:1px;opacity:0.01;z-index:9999;pointer-events:none}
+
+@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:8px;height:100vh;overflow-y:auto}}
 </style>
 </head>
 <body>
@@ -113,10 +115,10 @@ input:focus{border-color:var(--cyan)}
     <button class="secondary" id="toggle-view-btn" style="padding:4px 8px;font-size:0.68rem;border-radius:6px"><i class="fas fa-video"></i> Show Video</button>
   </div>
 
-  <!-- Unified Media Box (Holds either Cover Image or YouTube Player cleanly without echo) -->
+  <!-- Unified Media Box (Holds Cover Image or Clean YouTube Player without controls) -->
   <div class="media-container" id="media-container">
     <img id="cover-art" src="https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg" alt="Cover">
-    <div id="yt-player" style="width:100%;height:100%;display:none;"></div>
+    <div id="yt-player" style="width:100%;height:100%;display:none;pointer-events:none;"></div>
   </div>
 
   <div id="player-title">Select a song</div>
@@ -147,7 +149,6 @@ input:focus{border-color:var(--cyan)}
   <div class="modal-content">
     <button id="close-modal" class="secondary" style="position:absolute;top:10px;right:14px;padding:3px 6px;font-size:0.7rem">✕</button>
     
-    <!-- Simple PFP -->
     <div style="width:60px;height:60px;border-radius:50%;margin:0 auto 8px;overflow:hidden;border:2px solid var(--cyan);box-shadow:0 0 12px rgba(0,243,255,0.4);background:#090a12;display:flex;align-items:center;justify-content:center;">
       <i class="fas fa-user-astronaut" style="font-size:1.8rem;color:var(--cyan)"></i>
     </div>
@@ -210,11 +211,12 @@ function getVideoId(text){
 }
 
 function onYouTubeIframeAPIReady(){
+  // Clean YouTube Player parameters without any user-facing controls or overlays
   player = new YT.Player("yt-player",{
     width:"100%",
     height:"100%",
     videoId: currentList[0].id,
-    playerVars:{ playsinline:1, controls:0, disablekb:1, fs:0, modestbranding:1, rel:0, autoplay:0 },
+    playerVars:{ playsinline:1, controls:0, disablekb:1, fs:0, modestbranding:1, rel:0, autoplay:0, iv_load_policy:3 },
     events:{
       onReady:()=>{
         ready = true;
@@ -446,15 +448,7 @@ $("tab-search").addEventListener("click",()=>{
   renderResults();
 });
 
-$("tab-playlist").addEventListener("click",()=>{
-  activeTab = "playlist";
-  $("tab-playlist").classList.add("active");
-  $("tab-search").classList.remove("active");
-  index = -1;
-  renderResults();
-});
-
-// Toggle Video Mode vs Cover/Lyrics Mode cleanly using the exact same single player instance
+// Toggle Video Mode using the exact same player instance without echo
 $("toggle-view-btn").addEventListener("click",()=>{
   isVideoMode = !isVideoMode;
   const container = $("media-container");
@@ -462,7 +456,7 @@ $("toggle-view-btn").addEventListener("click",()=>{
   const ytDiv = $("yt-player");
   const lyricsBox = $("lyrics-display");
 
-if(isVideoMode){
+  if(isVideoMode){
     container.classList.add("video-mode");
     img.style.display = "none";
     ytDiv.style.display = "block";
@@ -588,3 +582,4 @@ draw();
 <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
+
