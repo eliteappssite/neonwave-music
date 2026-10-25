@@ -54,6 +54,7 @@ input:focus{border-color:var(--cyan)}
 .media-container{width:140px;height:140px;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);margin:4px auto 8px;box-shadow:0 6px 15px rgba(0,0,0,0.6);transition:all 0.3s ease;position:relative;background:#000;flex-shrink:0}
 .media-container.video-mode{width:100%;aspect-ratio:16/9;height:auto;border-radius:10px}
 .media-container img{width:100%;height:100%;object-fit:cover}
+.yt-shield{position:absolute;inset:0;z-index:10;pointer-events:auto;background:transparent}
 
 /* Synced Lyrics Box */
 .lyrics-box{width:100%;height:75px;overflow-y:auto;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px;font-size:0.72rem;color:var(--muted);margin-bottom:8px;text-align:center;line-height:1.4;scroll-behavior:smooth;flex-shrink:0}
@@ -66,9 +67,14 @@ input:focus{border-color:var(--cyan)}
 #progress{width:100%;accent-color:var(--cyan);cursor:pointer}
 .times{display:flex;justify-content:space-between;color:var(--muted);font-size:0.68rem;margin-top:2px}
 
-.controls{display:flex;justify-content:center;align-items:center;gap:10px;margin:4px 0;flex-shrink:0}
-.ctrl-btn{background:none;border:none;color:#fff;font-size:1rem;cursor:pointer}
+.controls{display:flex;justify-content:center;align-items:center;gap:8px;margin:4px 0;flex-shrink:0}
+.ctrl-btn{background:none;border:none;color:#fff;font-size:0.9rem;cursor:pointer;padding:4px}
+.ctrl-btn.active-toggle{color:var(--cyan);background:rgba(0,243,255,0.15);border-radius:6px}
 #play{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));font-size:0.9rem;display:flex;align-items:center;justify-content:center}
+
+/* Loading Spinner Animation */
+.fa-spinner{animation:spin 1s linear infinite;}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .secondary{background:#29243c}
 .secondary:hover{background:#3b3254}
@@ -115,10 +121,11 @@ input:focus{border-color:var(--cyan)}
     <button class="secondary" id="toggle-view-btn" style="padding:4px 8px;font-size:0.68rem;border-radius:6px"><i class="fas fa-video"></i> Show Video</button>
   </div>
 
-  <!-- Unified Media Box (Holds Cover Image or Clean YouTube Player without controls) -->
+  <!-- Unified Media Box with Shield Overlay for Clean Video Mode -->
   <div class="media-container" id="media-container">
     <img id="cover-art" src="https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg" alt="Cover">
-    <div id="yt-player" style="width:100%;height:100%;display:none;pointer-events:none;"></div>
+    <div id="yt-player" style="width:100%;height:100%;display:none;"></div>
+    <div class="yt-shield" id="yt-shield" style="display:none;"></div>
   </div>
 
   <div id="player-title">Select a song</div>
@@ -135,9 +142,13 @@ input:focus{border-color:var(--cyan)}
   </div>
 
   <div class="controls">
+    <button class="ctrl-btn active-toggle" id="shuffle-btn" title="Shuffle"><i class="fas fa-random"></i></button>
+    <button class="ctrl-btn" id="seek-back" title="Rewind 5s"><i class="fas fa-undo-alt"></i> -5s</button>
     <button class="secondary ctrl-btn" id="prev" aria-label="Previous"><i class="fas fa-backward"></i></button>
     <button class="ctrl-btn" id="play" aria-label="Play"><i class="fas fa-play"></i></button>
     <button class="secondary ctrl-btn" id="next" aria-label="Next"><i class="fas fa-forward"></i></button>
+    <button class="ctrl-btn" id="seek-forward" title="Forward 5s">+5s <i class="fas fa-redo-alt"></i></button>
+    <button class="ctrl-btn active-toggle" id="autonext-btn" title="Auto Next"><i class="fas fa-infinity"></i></button>
   </div>
 
   <button class="dl-btn" id="dl-btn"><i class="fas fa-download"></i> Download MP3</button>
@@ -177,6 +188,8 @@ let index = -1;
 let progressTimer = null;
 let isVideoMode = false;
 let currentLyricsArr = [];
+let isShuffle = false;
+let autoNextEnabled = true;
 
 const defaultTrending = [
   { id: 'HNdauINck9s', title: 'Trending Hindi Mashup 2026', author: 'COZI Music', thumb: 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg' },
@@ -211,7 +224,6 @@ function getVideoId(text){
 }
 
 function onYouTubeIframeAPIReady(){
-  // Clean YouTube Player parameters without any user-facing controls or overlays
   player = new YT.Player("yt-player",{
     width:"100%",
     height:"100%",
@@ -229,13 +241,17 @@ function onYouTubeIframeAPIReady(){
           setStatus("Playing audio.");
           startProgress();
           updateMediaSession();
+        }else if(event.data === YT.PlayerState.BUFFERING || event.data === YT.PlayerState.CUED){
+          $("play").innerHTML='<i class="fas fa-spinner fa-spin"></i>';
         }else{
           $("play").innerHTML='<i class="fas fa-play"></i>';
-          if(event.data === YT.PlayerState.ENDED) nextTrack();
+          if(event.data === YT.PlayerState.ENDED){
+            if(autoNextEnabled) nextTrack();
+          }
           if(event.data !== YT.PlayerState.PLAYING) stopProgress();
         }
       },
-      onError:()=>{ nextTrack(); }
+      onError:()=>{ if(autoNextEnabled) nextTrack(); }
     }
   });
 }
@@ -261,12 +277,19 @@ function stopProgress(){
 function playTrack(i){
   const targetList = activeTab === "search" ? currentList : savedPlaylist;
   if(!targetList.length || !ready) return;
-  index = (i + targetList.length) % targetList.length;
+  
+  if(isShuffle && activeTab === "search"){
+    index = Math.floor(Math.random() * targetList.length);
+  } else {
+    index = (i + targetList.length) % targetList.length;
+  }
+
   const track = targetList[index];
   $("player-title").textContent = track.title;
   $("player-author").textContent = track.author;
   $("cover-art").src = track.thumb;
 
+  $("play").innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   player.loadVideoById(track.id);
   renderResults();
   updateMediaSession();
@@ -275,11 +298,17 @@ function playTrack(i){
 
 function nextTrack(){
   const targetList = activeTab === "search" ? currentList : savedPlaylist;
-  if(targetList.length) playTrack(index+1);
+  if(!targetList.length) return;
+  if(isShuffle){
+    playTrack(Math.floor(Math.random() * targetList.length));
+  } else {
+    playTrack(index + 1);
+  }
 }
+
 function prevTrack(){
   const targetList = activeTab === "search" ? currentList : savedPlaylist;
-  if(targetList.length) playTrack(index-1);
+  if(targetList.length) playTrack(index - 1);
 }
 
 function updateMediaSession(){
@@ -384,7 +413,7 @@ function renderResults(){
     return;
   }
 
-  displayList.forEach((track,i)=>{
+displayList.forEach((track,i)=>{
     const card = document.createElement("div");
     card.className = "track";
 
@@ -456,26 +485,59 @@ $("tab-playlist").addEventListener("click",()=>{
   renderResults();
 });
 
-// Toggle Video Mode using the exact same player instance without echo
+// Toggle Clean Video Mode with Shield Overlay
 $("toggle-view-btn").addEventListener("click",()=>{
   isVideoMode = !isVideoMode;
   const container = $("media-container");
   const img = $("cover-art");
   const ytDiv = $("yt-player");
+  const shield = $("yt-shield");
   const lyricsBox = $("lyrics-display");
 
   if(isVideoMode){
     container.classList.add("video-mode");
     img.style.display = "none";
     ytDiv.style.display = "block";
+    shield.style.display = "block";
     lyricsBox.style.display = "none";
     $("toggle-view-btn").innerHTML = '<i class="fas fa-headphones"></i> Show Lyrics';
   } else {
     container.classList.remove("video-mode");
     ytDiv.style.display = "none";
+    shield.style.display = "none";
     img.style.display = "block";
     lyricsBox.style.display = "block";
     $("toggle-view-btn").innerHTML = '<i class="fas fa-video"></i> Show Video';
+  }
+});
+
+// Shuffle Toggle Button
+$("shuffle-btn").addEventListener("click",()=>{
+  isShuffle = !isShuffle;
+  $("shuffle-btn").classList.toggle("active-toggle", isShuffle);
+  setStatus(isShuffle ? "Shuffle Mode ON" : "Shuffle Mode OFF");
+});
+
+// Auto-Next Toggle Button
+$("autonext-btn").addEventListener("click",()=>{
+  autoNextEnabled = !autoNextEnabled;
+  $("autonext-btn").classList.toggle("active-toggle", autoNextEnabled);
+  setStatus(autoNextEnabled ? "Auto-Next ON" : "Auto-Next OFF");
+});
+
+// 5 Seconds Skip Backward & Forward
+$("seek-back").addEventListener("click",()=>{
+  if(player && ready){
+    const curr = player.getCurrentTime() || 0;
+    player.seekTo(Math.max(0, curr - 5), true);
+  }
+});
+
+$("seek-forward").addEventListener("click",()=>{
+  if(player && ready){
+    const curr = player.getCurrentTime() || 0;
+    const dur = player.getDuration() || 0;
+    player.seekTo(Math.min(dur, curr + 5), true);
   }
 });
 
