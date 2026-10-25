@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neon Wave - Soundbound Multi-Provider Engine</title>
+  <title>Neon Wave - Soundbound Engine</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -107,13 +107,13 @@
         <div class="search-box">
           <div class="search-input-wrap">
             <i class="fas fa-search"></i>
-            <input type="text" id="search-input" class="search-input" placeholder="Search any song, artist, or paste YT link...">
+            <input type="text" id="search-input" class="search-input" placeholder="Paste YouTube Link or Search Song...">
           </div>
-          <button class="search-btn" id="search-btn">Search</button>
+          <button class="search-btn" id="search-btn">Play / Search</button>
         </div>
 
         <div class="status-bar" id="status-bar">
-          <i class="fas fa-network-wired"></i> <span id="status-text">Soundbound Providers Active</span>
+          <i class="fas fa-network-wired"></i> <span id="status-text">Soundbound Multi-Source Ready</span>
         </div>
 
         <div class="results-list" id="results-list"></div>
@@ -131,7 +131,7 @@
           </div>
 
           <div class="now-playing-title" id="player-title">Select a Song</div>
-          <div class="now-playing-author" id="player-author">Soundbound Engine</div>
+          <div class="now-playing-author" id="player-author">Soundbound Provider</div>
         </div>
 
         <div class="progress-wrap">
@@ -153,7 +153,7 @@
     </div>
   </div>
 
-  <!-- HTML5 Background Native Audio Player -->
+  <!-- Audio Player Elements -->
   <audio id="main-audio" preload="metadata"></audio>
   <div id="yt-backend-engine"><div id="yt-player"></div></div>
 
@@ -162,24 +162,18 @@
     <div class="modal-content">
       <span class="close-modal" id="close-modal">&times;</span>
       <h2 style="font-family:'Orbitron'; color:var(--neon-cyan); margin-bottom:6px;">NEON WAVE</h2>
-      <p style="font-size:0.85rem; color:var(--neon-pink); font-weight:700; margin-bottom:15px;">Developed by Tarun</p>
+      <p style="font-size:0.9rem; color:var(--neon-pink); font-weight:700; margin-bottom:12px;">Developed by Tarun</p>
       <p style="font-size:0.85rem; line-height:1.5; color:var(--text-muted); margin-bottom:20px;">
-        Soundbound Multi-Source Architecture supporting background playback, dynamic search routing, and direct high-speed MP3 downloading.
+        Multi-source Soundbound architecture supporting unblocked playback, background media controls, and direct MP3 downloads.
       </p>
-      <a href="https://www.instagram.com/tarun.amv?mdxt=bXZndmRvN3Q1d2No" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color:#fff; border-radius:30px; text-decoration:none; font-weight:700; font-size:0.9rem;">
-        <i class="fab fa-instagram"></i> Follow on Instagram
+      <a href="https://www.instagram.com/tarun.amv?mdxt=bXZndmRvN3Q1d2No" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:10px 22px; background:linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color:#fff; border-radius:30px; text-decoration:none; font-weight:700; font-size:0.9rem;">
+        <i class="fab fa-instagram"></i> Follow @tarun.amv
       </a>
     </div>
   </div>
 
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    // Soundbound Fallback Provider Mesh
-    const soundboundProviders = [
-      { id: 'saavn_primary', name: 'SaavnProvider', url: 'https://saavn.dev/api/search/songs?query=' },
-      { id: 'saavn_secondary', name: 'SaavnMirror', url: 'https://jiosaavn-api-private-us.vercel.app/search/songs?query=' }
-    ];
-
     const defaultPlaylist = [
       { id: 'HNdauINck9s', title: 'Trending Hindi Songs 2026', author: 'COZI Music', thumb: 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg', provider: 'YouTube' },
       { id: '10gxMMO2X40', title: 'Best Hindi Love Songs', author: 'VDj Royal', thumb: 'https://i.ytimg.com/vi/10gxMMO2X40/hqdefault.jpg', provider: 'YouTube' },
@@ -190,13 +184,12 @@
     let currentIndex = 0;
     let ytPlayer = null;
     let isPlaying = false;
-    let activeMode = 'yt'; // 'yt' or 'native'
+    let activeMode = 'yt';
     let timer = null;
 
     const audioEl = document.getElementById('main-audio');
     const statusText = document.getElementById('status-text');
 
-    // Init YouTube API
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player('yt-player', {
         height: '0', width: '0',
@@ -208,7 +201,7 @@
             if (e.data === YT.PlayerState.PLAYING) {
               isPlaying = true;
               document.getElementById('play-btn').innerHTML = '<i class="fas fa-pause"></i>';
-              statusText.innerText = 'Playing via YoutubeProvider Engine';
+              statusText.innerText = 'Playing via YouTube Engine';
               startProgressLoop();
               updateMediaSession();
             } else {
@@ -219,18 +212,17 @@
             if (e.data === YT.PlayerState.ENDED) nextTrack();
           },
           'onError': () => {
-            statusText.innerText = 'YouTube track blocked. Switching to Soundbound Mirror...';
+            statusText.innerText = 'Track restricted. Shifting to next...';
             nextTrack();
           }
         }
       });
     }
 
-    // HTML5 Background Audio Listeners
     audioEl.onplay = () => {
       isPlaying = true;
       document.getElementById('play-btn').innerHTML = '<i class="fas fa-pause"></i>';
-      statusText.innerText = 'Playing Background Audio';
+      statusText.innerText = 'Playing Audio Stream';
       startProgressLoop();
       updateMediaSession();
     };
@@ -307,7 +299,6 @@
     document.getElementById('next-btn').onclick = nextTrack;
     document.getElementById('prev-btn').onclick = prevTrack;
 
-    // Background Controls MediaSession Sync
     function updateMediaSession() {
       if ('mediaSession' in navigator) {
         const track = currentPlaylist[currentIndex];
@@ -357,7 +348,7 @@
       return `${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
-    // Soundbound Multi-Provider Dynamic Search Logic
+    // Robust Unblocked Search Handler (YouTube Link Parser + Soundbound Fallbacks)
     document.getElementById('search-btn').onclick = async () => {
       const q = document.getElementById('search-input').value.trim();
       if (!q) return;
@@ -368,46 +359,53 @@
       else if (q.length === 11) vid = q;
 
       if (vid) {
-        const newTrack = { id: vid, title: 'YouTube Direct Audio', author: 'YoutubeProvider', thumb: `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`, provider: 'YouTube' };
+        const newTrack = { id: vid, title: 'YouTube Direct Track', author: 'YoutubeProvider', thumb: `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`, provider: 'YouTube' };
         currentPlaylist.unshift(newTrack);
         loadTrack(0, true);
         document.getElementById('search-input').value = '';
+        statusText.innerText = 'YouTube Link Loaded Successfully!';
       } else {
-        statusText.innerText = `Fetching via Soundbound Providers...`;
-        let fetchedSongs = [];
+        statusText.innerText = `Searching via Soundbound Proxy Mesh...`;
+        let fetched = [];
+        
+        // Multi-proxy endpoints with direct fallback handling
+        const endpoints = [
+          `https://saavn.dev/api/search/songs?query=${encodeURIComponent(q)}`,
+          `https://jiosaavn-api-private-us.vercel.app/search/songs?query=${encodeURIComponent(q)}`
+        ];
 
-        for (const p of soundboundProviders) {
+        for (const url of endpoints) {
           try {
-            const res = await fetch(p.url + encodeURIComponent(q));
+            const res = await fetch(url);
             const data = await res.json();
             const results = data.data?.results || data.data || [];
             if (results && results.length > 0) {
-              fetchedSongs = results.map(item => ({
+              fetched = results.map(item => ({
                 id: item.id,
                 title: item.name || item.title,
-                author: (item.artists && item.artists.primary && item.artists.primary[0] && item.artists.primary[0].name) || 'Soundbound Artist',
-                thumb: (item.image && item.image[2] && item.image[2].link) || item.image[0]?.link || 'https://picsum.photos/300',
-                audioUrl: (item.downloadUrl && item.downloadUrl[4] && item.downloadUrl[4].link) || (item.downloadUrl && item.downloadUrl[2] && item.downloadUrl[2].link),
-                provider: p.name
+                author: item.artists?.primary?.[0]?.name || 'Soundbound Artist',
+                thumb: item.image?.[2]?.link || item.image?.[0]?.link || 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg',
+                audioUrl: item.downloadUrl?.[4]?.link || item.downloadUrl?.[2]?.link,
+                provider: 'Soundbound Mirror'
               }));
               break;
             }
-           } catch (e) {
-            console.warn(`Provider ${p.name} failed, shifting to next source...`);
+          } catch (e) {
+            console.warn("Proxy blocked, trying next...");
           }
         }
 
-        if (fetchedSongs.length > 0) {
-          currentPlaylist = [...fetchedSongs, ...defaultPlaylist];
-          statusText.innerText = `Found ${fetchedSongs.length} songs via Soundbound Engine`;
+        if (fetched.length > 0) {
+          currentPlaylist = [...fetched, ...defaultPlaylist];
+          statusText.innerText = `Loaded ${fetched.length} tracks successfully!`;
           loadTrack(0, true);
         } else {
-          statusText.innerText = 'Search proxy blocked. Paste a YouTube URL or Video ID directly.';
+          statusText.innerText = 'Public API restricted. Paste YouTube Link / Video ID directly!';
         }
       }
     };
 
-    // Auto MP3 Direct Downloader
+    // Auto MP3 Direct Download
     document.getElementById('dl-btn').onclick = async () => {
       const track = currentPlaylist[currentIndex];
       if (track.audioUrl) {
@@ -431,7 +429,6 @@
       }
     };
 
-    // Modal Handlers
     const modal = document.getElementById('dev-modal');
     document.getElementById('dev-btn').onclick = () => modal.style.display = 'flex';
     document.getElementById('close-modal').onclick = () => modal.style.display = 'none';
