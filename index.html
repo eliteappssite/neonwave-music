@@ -9,13 +9,13 @@
 <style>
 :root{--bg:#06070d;--card:#121420;--cyan:#00f3ff;--pink:#ff007f;--purple:#9d00ff;--muted:#8b949e}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:#f0f4f8;font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:auto}
+html, body { height: 100vh; overflow: hidden; background: var(--bg); color: #f0f4f8; font-family: 'Plus Jakarta Sans', sans-serif; }
 
 #bg-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
 
-.app{position:relative;z-index:1;max-width:1150px;margin:auto;padding:16px;display:flex;flex-direction:column;min-height:100vh}
+.app{position:relative;z-index:1;max-width:1150px;height:100vh;margin:auto;padding:12px;display:flex;flex-direction:column;overflow:hidden}
 
-header{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:12px 18px;margin-bottom:16px;backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center}
+header{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:12px 18px;margin-bottom:12px;backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 h1{font:900 1.2rem Orbitron,sans-serif;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
 button{cursor:pointer;border:0;border-radius:10px;padding:8px 14px;color:white;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--purple));transition:0.3s}
@@ -23,73 +23,64 @@ button:hover{opacity:0.9}
 input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#090a12;color:white;font:inherit;outline:none}
 input:focus{border-color:var(--cyan)}
 
-.search-box{display:flex;gap:8px;margin-bottom:10px}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tab-btn{flex:1;background:rgba(255,255,255,0.04);color:var(--muted);font-size:0.78rem;padding:8px;border-radius:8px}
+.search-box{display:flex;gap:8px;margin-bottom:8px}
+.tabs{display:flex;gap:8px;margin-bottom:10px}
+.tab-btn{flex:1;background:rgba(255,255,255,0.04);color:var(--muted);font-size:0.78rem;padding:6px;border-radius:8px}
 .tab-btn.active{background:var(--cyan);color:#000;font-weight:800}
 
-.playlist-manager{display:flex;gap:8px;margin-bottom:12px;align-items:center}
-.playlist-select{flex:1;padding:8px 12px;border-radius:8px;background:#090a12;border:1px solid rgba(255,255,255,0.1);color:white;font-size:0.8rem;outline:none}
+.layout{display:grid;grid-template-columns:1fr 350px;gap:14px;flex:1;min-height:0;align-items:stretch}
+.panel{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 
-.layout{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start}
-.panel{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px;display:flex;flex-direction:column}
-
-/* Results Column */
-.results-container{max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px}
+/* Results Column inside panel */
+.results-container{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px;min-height:0}
 .results-container::-webkit-scrollbar{width:4px}
 .results-container::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:4px}
 
 .track{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid rgba(255,255,255,0.05);border-radius:10px;cursor:pointer;background:rgba(255,255,255,0.02);flex-shrink:0}
 .track:hover{border-color:var(--cyan);background:rgba(255,255,255,0.06)}
-.track img{width:70px;height:48px;object-fit:cover;border-radius:6px;flex-shrink:0}
+.track img{width:65px;height:45px;object-fit:cover;border-radius:6px;flex-shrink:0}
 .info{flex:1;min-width:0}
-.title{font-weight:700;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.author{font-size:0.7rem;color:var(--muted)}
-.save-track-btn{background:none;color:var(--muted);padding:6px;font-size:1rem}
+.title{font-weight:700;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.author{font-size:0.68rem;color:var(--muted)}
+.save-track-btn{background:none;color:var(--muted);padding:4px;font-size:0.95rem}
 .save-track-btn.saved{color:var(--pink)}
 
 /* Player Panel */
-.player{text-align:center;display:flex;flex-direction:column;align-items:center}
-#player-title{font-weight:700;font-size:0.9rem;margin:6px 0 2px;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#player-author{color:var(--muted);font-size:0.75rem;margin-bottom:8px}
+.player{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow-y:auto}
+#player-title{font-weight:700;font-size:0.88rem;margin:4px 0 2px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#player-author{color:var(--muted);font-size:0.72rem;margin-bottom:6px}
 
-/* Clean Video Mode Container with Shield Overlay */
-.media-container{width:160px;height:160px;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);margin:6px auto 10px;box-shadow:0 8px 20px rgba(0,0,0,0.6);transition:all 0.3s ease;position:relative;background:#000;flex-shrink:0}
-.media-container.video-mode{width:100%;aspect-ratio:16/9;height:auto;border-radius:12px}
+/* Clean Video Mode & Cover Container */
+.media-container{width:140px;height:140px;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);margin:4px auto 8px;box-shadow:0 6px 15px rgba(0,0,0,0.6);transition:all 0.3s ease;position:relative;background:#000;flex-shrink:0}
+.media-container.video-mode{width:100%;aspect-ratio:16/9;height:auto;border-radius:10px}
 .media-container img{width:100%;height:100%;object-fit:cover}
-.yt-shield{position:absolute;inset:0;z-index:10;pointer-events:auto;background:transparent}
 
 /* Synced Lyrics Box */
-.lyrics-box{width:100%;height:85px;overflow-y:auto;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:8px;font-size:0.75rem;color:var(--muted);margin-bottom:10px;text-align:center;line-height:1.5;scroll-behavior:smooth}
+.lyrics-box{width:100%;height:75px;overflow-y:auto;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px;font-size:0.72rem;color:var(--muted);margin-bottom:8px;text-align:center;line-height:1.4;scroll-behavior:smooth;flex-shrink:0}
 .lyrics-box::-webkit-scrollbar{width:3px}
 .lyrics-box::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:3px}
-.lyric-line{transition:0.3s;margin:3px 0}
-.lyric-line.active{color:var(--cyan);font-weight:700;transform:scale(1.03)}
+.lyric-line{transition:0.3s;margin:2px 0}
+.lyric-line.active{color:var(--cyan);font-weight:700;transform:scale(1.02)}
 
-.progress-wrap{width:100%;margin-bottom:8px}
+.progress-wrap{width:100%;margin-bottom:6px;flex-shrink:0}
 #progress{width:100%;accent-color:var(--cyan);cursor:pointer}
-.times{display:flex;justify-content:space-between;color:var(--muted);font-size:0.7rem;margin-top:3px}
+.times{display:flex;justify-content:space-between;color:var(--muted);font-size:0.68rem;margin-top:2px}
 
-.controls{display:flex;justify-content:center;align-items:center;gap:8px;margin:8px 0}
-.ctrl-btn{background:none;border:none;color:#fff;font-size:1rem;cursor:pointer;padding:6px;border-radius:50%}
-.ctrl-btn.active-toggle{color:var(--cyan);background:rgba(0,243,255,0.15)}
-#play{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));font-size:1rem;display:flex;align-items:center;justify-content:center}
-
-/* Loading Spinner for Play Button */
-.fa-spinner{animation:spin 1s linear infinite;}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.controls{display:flex;justify-content:center;align-items:center;gap:10px;margin:4px 0;flex-shrink:0}
+.ctrl-btn{background:none;border:none;color:#fff;font-size:1rem;cursor:pointer}
+#play{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));font-size:0.9rem;display:flex;align-items:center;justify-content:center}
 
 .secondary{background:#29243c}
 .secondary:hover{background:#3b3254}
 
-.dl-btn{width:100%;margin-top:4px;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.8rem;padding:10px}
+.dl-btn{width:100%;margin-top:4px;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.78rem;padding:8px;flex-shrink:0}
 
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;z-index:100}
-.modal-content{background:var(--card);border:1px solid var(--purple);border-radius:20px;padding:22px;max-width:340px;text-align:center;position:relative}
+.modal-content{background:var(--card);border:1px solid var(--purple);border-radius:18px;padding:20px;max-width:320px;text-align:center;position:relative}
 
 #yt-background-container{position:fixed;bottom:0;left:0;width:1px;height:1px;opacity:0.01;z-index:9999;pointer-events:none}
 
-@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:10px}}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:8px;height:100vh;overflow-y:auto}}
 </style>
 </head>
 <body>
@@ -111,13 +102,7 @@ input:focus{border-color:var(--cyan)}
 
   <div class="tabs">
     <button class="tab-btn active" id="tab-search">Search / Trending</button>
-    <button class="tab-btn" id="tab-playlist">My Playlists</button>
-  </div>
-
-  <!-- Multiple Playlist Controls -->
-  <div class="playlist-manager" id="playlist-manager" style="display:none;">
-    <select class="playlist-select" id="playlist-dropdown"></select>
-    <button class="secondary" id="new-playlist-btn" style="padding:8px 10px;font-size:0.75rem"><i class="fas fa-plus"></i> New</button>
+    <button class="tab-btn" id="tab-playlist">My Playlist (<span id="playlist-count">0</span>)</button>
   </div>
 
   <div class="status" id="status" style="color:var(--cyan);font-size:0.75rem;margin-bottom:8px">Ready to play.</div>
@@ -130,11 +115,10 @@ input:focus{border-color:var(--cyan)}
     <button class="secondary" id="toggle-view-btn" style="padding:4px 8px;font-size:0.68rem;border-radius:6px"><i class="fas fa-video"></i> Show Video</button>
   </div>
 
-  <!-- Clean Video Container with Shield Overlay -->
+  <!-- Unified Media Box (Holds Cover Image or Clean YouTube Player without controls) -->
   <div class="media-container" id="media-container">
     <img id="cover-art" src="https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg" alt="Cover">
-    <div id="yt-player" style="width:100%;height:100%;display:none;"></div>
-    <div class="yt-shield" id="yt-shield" style="display:none;"></div>
+    <div id="yt-player" style="width:100%;height:100%;display:none;pointer-events:none;"></div>
   </div>
 
   <div id="player-title">Select a song</div>
@@ -151,13 +135,9 @@ input:focus{border-color:var(--cyan)}
   </div>
 
   <div class="controls">
-    <button class="ctrl-btn active-toggle" id="shuffle-btn" title="Shuffle"><i class="fas fa-random"></i></button>
-    <button class="ctrl-btn" id="seek-back" title="Rewind 5s"><i class="fas fa-undo-alt"></i></button>
     <button class="secondary ctrl-btn" id="prev" aria-label="Previous"><i class="fas fa-backward"></i></button>
     <button class="ctrl-btn" id="play" aria-label="Play"><i class="fas fa-play"></i></button>
     <button class="secondary ctrl-btn" id="next" aria-label="Next"><i class="fas fa-forward"></i></button>
-    <button class="ctrl-btn" id="seek-forward" title="Forward 5s"><i class="fas fa-redo-alt"></i></button>
-    <button class="ctrl-btn active-toggle" id="autonext-btn" title="Auto Next"><i class="fas fa-infinity"></i></button>
   </div>
 
   <button class="dl-btn" id="dl-btn"><i class="fas fa-download"></i> Download MP3</button>
@@ -175,7 +155,7 @@ input:focus{border-color:var(--cyan)}
 
     <h2 style="font-family:Orbitron;color:var(--cyan);font-size:1rem;margin-bottom:2px">NEON WAVE</h2>
     <p style="color:var(--pink);font-weight:700;font-size:0.8rem;margin-bottom:4px">Developed by Tarun</p>
-    <p style="color:var(--muted);font-size:0.72rem;line-height:1.3;margin-bottom:12px">Neon Wave Premium — Multiple custom playlists, 5s skip buttons, loading animations, auto-next toggle, and clean video mode.</p>
+    <p style="color:var(--muted);font-size:0.72rem;line-height:1.3;margin-bottom:12px">Neon Wave Premium — Clean unified player, synchronized lyrics, fixed layout, and background playback.</p>
     
     <a href="https://www.instagram.com/tarun.amv?mdxt=bXZndmRvN3Q1d2No" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;border-radius:18px;text-decoration:none;font-weight:700;font-size:0.75rem;">
       <i class="fab fa-instagram"></i> Follow @tarun.amv
@@ -191,17 +171,12 @@ const status = $("status");
 let player = null;
 let ready = false;
 let currentList = [];
-
-let playlists = JSON.parse(localStorage.getItem("neon_playlists") || JSON.stringify({ "Favorites": [] }));
-let activePlaylistName = Object.keys(playlists)[0] || "Favorites";
-
+let savedPlaylist = JSON.parse(localStorage.getItem("neon_playlist") || "[]");
 let activeTab = "search";
 let index = -1;
 let progressTimer = null;
 let isVideoMode = false;
 let currentLyricsArr = [];
-let isShuffle = false;
-let autoNextEnabled = true;
 
 const defaultTrending = [
   { id: 'HNdauINck9s', title: 'Trending Hindi Mashup 2026', author: 'COZI Music', thumb: 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg' },
@@ -213,22 +188,8 @@ const defaultTrending = [
 currentList = [...defaultTrending];
 
 function setStatus(msg){ status.textContent = msg; }
-
-function updatePlaylistDropdown(){
-  const dropdown = $("playlist-dropdown");
-  if(!dropdown) return;
-  dropdown.replaceChildren();
-  Object.keys(playlists).forEach(name => {
-    const opt = document.createElement("option");
-    opt.value = name;
-    opt.textContent = `${name} (${playlists[name].length})`;
-    if(name === activePlaylistName) opt.selected = true;
-    dropdown.append(opt);
-  });
-  const totalSaved = Object.values(playlists).reduce((acc, curr) => acc + curr.length, 0);
-  $("playlist-count").textContent = totalSaved;
-}
-updatePlaylistDropdown();
+function updatePlaylistCount(){ $("playlist-count").textContent = savedPlaylist.length; }
+updatePlaylistCount();
 
 function formatTime(val){
   if(!Number.isFinite(val) || val < 0) return "0:00";
@@ -250,6 +211,7 @@ function getVideoId(text){
 }
 
 function onYouTubeIframeAPIReady(){
+  // Clean YouTube Player parameters without any user-facing controls or overlays
   player = new YT.Player("yt-player",{
     width:"100%",
     height:"100%",
@@ -267,17 +229,13 @@ function onYouTubeIframeAPIReady(){
           setStatus("Playing audio.");
           startProgress();
           updateMediaSession();
-        }else if(event.data === YT.PlayerState.BUFFERING || event.data === YT.PlayerState.CUED){
-          $("play").innerHTML='<i class="fas fa-spinner fa-spin"></i>';
         }else{
           $("play").innerHTML='<i class="fas fa-play"></i>';
-          if(event.data === YT.PlayerState.ENDED){
-            if(autoNextEnabled) nextTrack();
-          }
+          if(event.data === YT.PlayerState.ENDED) nextTrack();
           if(event.data !== YT.PlayerState.PLAYING) stopProgress();
         }
       },
-      onError:()=>{ if(autoNextEnabled) nextTrack(); }
+      onError:()=>{ nextTrack(); }
     }
   });
 }
@@ -301,21 +259,14 @@ function stopProgress(){
 }
 
 function playTrack(i){
-  const targetList = activeTab === "search" ? currentList : playlists[activePlaylistName];
-  if(!targetList || !targetList.length || !ready) return;
-  
-  if(isShuffle){
-    index = Math.floor(Math.random() * targetList.length);
-  } else {
-    index = (i + targetList.length) % targetList.length;
-  }
-
+  const targetList = activeTab === "search" ? currentList : savedPlaylist;
+  if(!targetList.length || !ready) return;
+  index = (i + targetList.length) % targetList.length;
   const track = targetList[index];
   $("player-title").textContent = track.title;
   $("player-author").textContent = track.author;
   $("cover-art").src = track.thumb;
 
-  $("play").innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   player.loadVideoById(track.id);
   renderResults();
   updateMediaSession();
@@ -323,22 +274,16 @@ function playTrack(i){
 }
 
 function nextTrack(){
-  const targetList = activeTab === "search" ? currentList : playlists[activePlaylistName];
-  if(!targetList.length) return;
-  if(isShuffle){
-    playTrack(Math.floor(Math.random() * targetList.length));
-  } else {
-    playTrack(index + 1);
-  }
+  const targetList = activeTab === "search" ? currentList : savedPlaylist;
+  if(targetList.length) playTrack(index+1);
 }
-
 function prevTrack(){
-  const targetList = activeTab === "search" ? currentList : playlists[activePlaylistName];
-  if(targetList.length) playTrack(index - 1);
+  const targetList = activeTab === "search" ? currentList : savedPlaylist;
+  if(targetList.length) playTrack(index-1);
 }
 
 function updateMediaSession(){
-  const targetList = activeTab === "search" ? currentList : playlists[activePlaylistName];
+  const targetList = activeTab === "search" ? currentList : savedPlaylist;
   if('mediaSession' in navigator && index >= 0 && targetList[index]){
     const track = targetList[index];
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -428,14 +373,13 @@ function syncAnimatedLyrics(currentTime){
 
 function renderResults(){
   const list = $("results");
-  if(!list) return;
   list.replaceChildren();
-  const displayList = activeTab === "search" ? currentList : (playlists[activePlaylistName] || []);
+  const displayList = activeTab === "search" ? currentList : savedPlaylist;
 
   if(displayList.length === 0){
     const empty = document.createElement("div");
     empty.style.cssText = "text-align:center;color:var(--muted);padding:30px 0;font-size:0.8rem;";
-    empty.textContent = activeTab === "search" ? "No results found." : `Playlist "${activePlaylistName}" is empty! Save tracks using the heart icon.`;
+    empty.textContent = activeTab === "search" ? "No results found." : "Your playlist is empty! Save tracks using the heart icon.";
     list.append(empty);
     return;
   }
@@ -462,19 +406,19 @@ function renderResults(){
     info.append(title,author);
 
     const saveBtn = document.createElement("button");
-    const isSaved = Object.values(playlists).some(arr => arr.some(s => s.id === track.id));
+    const isSaved = savedPlaylist.some(s => s.id === track.id);
     saveBtn.className = `save-track-btn ${isSaved ? 'saved' : ''}`;
     saveBtn.innerHTML = `<i class="${isSaved ? 'fas' : 'far'} fa-heart"></i>`;
     saveBtn.title = "Save to Playlist";
     
     saveBtn.addEventListener("click",(e)=>{
       e.stopPropagation();
-      openPlaylistSelector(track);
+      toggleSaveTrack(track);
     });
 
     card.append(img,info,saveBtn);
 
-    if(i === index && ((activeTab==="search" && currentList===displayList) || (activeTab==="playlist" && playlists[activePlaylistName]===displayList))){
+    if(i === index && ((activeTab==="search" && currentList===displayList) || (activeTab==="playlist" && savedPlaylist===displayList))){
       card.style.borderColor = "var(--cyan)";
     }
     card.addEventListener("click",()=>playTrack(i));
@@ -482,24 +426,17 @@ function renderResults(){
   });
 }
 
-function openPlaylistSelector(track){
-  const plNames = Object.keys(playlists);
-  let choice = prompt(`Add to which playlist?\nAvailable: ${plNames.join(", ")}\n(Type playlist name or create new):`, activePlaylistName);
-  if(!choice) return;
-  choice = choice.trim();
-  if(!playlists[choice]){
-    playlists[choice] = [];
-  }
-  const exists = playlists[choice].some(s => s.id === track.id);
-  if(!exists){
-    playlists[choice].push(track);
-    setStatus(`Added to "${choice}"!`);
+function toggleSaveTrack(track){
+  const idx = savedPlaylist.findIndex(s => s.id === track.id);
+  if(idx !== -1){
+    savedPlaylist.splice(idx,1);
+    setStatus("Removed from playlist.");
   } else {
-    playlists[choice] = playlists[choice].filter(s => s.id !== track.id);
-    setStatus(`Removed from "${choice}".`);
+    savedPlaylist.push(track);
+    setStatus("Saved to playlist!");
   }
-  localStorage.setItem("neon_playlists", JSON.stringify(playlists));
-  updatePlaylistDropdown();
+  localStorage.setItem("neon_playlist", JSON.stringify(savedPlaylist));
+  updatePlaylistCount();
   renderResults();
 }
 
@@ -507,7 +444,6 @@ $("tab-search").addEventListener("click",()=>{
   activeTab = "search";
   $("tab-search").classList.add("active");
   $("tab-playlist").classList.remove("active");
-  $("playlist-manager").style.display = "none";
   index = -1;
   renderResults();
 });
@@ -516,87 +452,30 @@ $("tab-playlist").addEventListener("click",()=>{
   activeTab = "playlist";
   $("tab-playlist").classList.add("active");
   $("tab-search").classList.remove("active");
-  $("playlist-manager").style.display = "flex";
   index = -1;
   renderResults();
 });
 
-$("playlist-dropdown").addEventListener("change",(e)=>{
-  activePlaylistName = e.target.value;
-  index = -1;
-  renderResults();
-});
-
-$("new-playlist-btn").addEventListener("click",()=>{
-  const name = prompt("Enter new playlist name:");
-  if(name && name.trim()){
-    const cleanName = name.trim();
-    if(!playlists[cleanName]){
-      playlists[cleanName] = [];
-      localStorage.setItem("neon_playlists", JSON.stringify(playlists));
-      activePlaylistName = cleanName;
-      updatePlaylistDropdown();
-      renderResults();
-      setStatus(`Playlist "${cleanName}" created!`);
-    } else {
-      alert("Playlist already exists!");
-    }
-  }
-});
-
-// Toggle Clean Video Mode
+// Toggle Video Mode using the exact same player instance without echo
 $("toggle-view-btn").addEventListener("click",()=>{
   isVideoMode = !isVideoMode;
   const container = $("media-container");
   const img = $("cover-art");
   const ytDiv = $("yt-player");
-  const shield = $("yt-shield");
   const lyricsBox = $("lyrics-display");
 
   if(isVideoMode){
     container.classList.add("video-mode");
     img.style.display = "none";
     ytDiv.style.display = "block";
-    shield.style.display = "block";
     lyricsBox.style.display = "none";
     $("toggle-view-btn").innerHTML = '<i class="fas fa-headphones"></i> Show Lyrics';
   } else {
     container.classList.remove("video-mode");
     ytDiv.style.display = "none";
-    shield.style.display = "none";
     img.style.display = "block";
     lyricsBox.style.display = "block";
     $("toggle-view-btn").innerHTML = '<i class="fas fa-video"></i> Show Video';
-  }
-});
-
-// Shuffle Button Toggle
-$("shuffle-btn").addEventListener("click",()=>{
-  isShuffle = !isShuffle;
-  $("shuffle-btn").classList.toggle("active-toggle", isShuffle);
-  setStatus(isShuffle ? "Shuffle Mode ON" : "Shuffle Mode OFF");
-});
-
-// Auto-Next Button Toggle
-$("autonext-btn").addEventListener("click",()=>{
-  autoNextEnabled = !autoNextEnabled;
-  $("autonext-btn").classList.toggle("active-toggle", autoNextEnabled);
-  setStatus(autoNextEnabled ? "Auto-Next ON" : "Auto-Next OFF");
-});
-
-// 5 Seconds Rewind / Forward
-$("seek-back").addEventListener("click",()=>{
-  if(player && ready){
-    const curr = player.getCurrentTime() || 0;
-    player.seekTo(Math.max(0, curr - 5), true);
-  }
-});
-
-$("seek-forward").addEventListener("click",()=>{
-  if(player && ready){
-    const curr = player.getCurrentTime() || 0;
-    const dur = player.getDuration() || 0;
-    player.seekTo(Math.min(dur, curr + 5), true);
   }
 });
 
@@ -628,7 +507,6 @@ $("search-form").addEventListener("submit",async event=>{
     activeTab = "search";
     $("tab-search").classList.add("active");
     $("tab-playlist").classList.remove("active");
-    $("playlist-manager").style.display = "none";
     renderResults();
     if(ready) playTrack(0);
     return;
@@ -647,7 +525,6 @@ $("search-form").addEventListener("submit",async event=>{
     activeTab = "search";
     $("tab-search").classList.add("active");
     $("tab-playlist").classList.remove("active");
-    $("playlist-manager").style.display = "none";
     index = -1;
     renderResults();
     setStatus("Found "+currentList.length+" tracks.");
@@ -659,7 +536,7 @@ $("search-form").addEventListener("submit",async event=>{
 
 $("play").addEventListener("click",()=>{
   if(!ready){setStatus("Loading player...");return;}
-  const targetList = activeTab === "search" ? currentList : playlists[activePlaylistName];
+  const targetList = activeTab === "search" ? currentList : savedPlaylist;
   if(index < 0){ if(targetList.length) playTrack(0); return; }
   const state = player.getPlayerState();
   if(state === YT.PlayerState.PLAYING) player.pauseVideo();
@@ -677,7 +554,7 @@ $("progress").addEventListener("change",()=>{
 
 // Auto-Paste YouTube Link into Download Mirror format: https://good-enough-gallery.pl/#u=https://youtu.be/...
 $("dl-btn").addEventListener("click",()=>{
-  const targetList = activeTab === "search" ? currentList : playlists[activePlaylistName];
+  const targetList = activeTab === "search" ? currentList : savedPlaylist;
   if(index < 0 || !targetList[index]){ alert("Please play or select a song first!"); return; }
   const track = targetList[index];
   const ytUrl = `https://youtu.be/${track.id}`;
