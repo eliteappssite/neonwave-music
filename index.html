@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Neon Wave Premium - Ultimate Audio Experience</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -10,98 +10,101 @@
 :root{--bg:#06070d;--card:#121420;--cyan:#00f3ff;--pink:#ff007f;--purple:#9d00ff;--muted:#8b949e}
 *{box-sizing:border-box;margin:0;padding:0}
 
-/* Completely free vertical page scrolling, zero lock */
+/* Fully free vertical scrolling with no lock or horizontal overflow */
 html, body {
   min-height: 100vh;
   height: auto !important;
   overflow-y: auto !important;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
   background: var(--bg);
   color: #f0f4f8;
   font-family: 'Plus Jakarta Sans', sans-serif;
+  width: 100%;
 }
 
 #bg-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
 
-.app{position:relative;z-index:1;max-width:1150px;margin:auto;padding:12px;display:flex;flex-direction:column}
+.app{position:relative;z-index:1;max-width:1150px;width:100%;margin:auto;padding:12px;display:flex;flex-direction:column;overflow-x:hidden}
 
-header{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:12px 18px;margin-bottom:12px;backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+header{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:12px 18px;margin-bottom:12px;backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center;width:100%}
 h1{font:900 1.2rem Orbitron,sans-serif;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-button{cursor:pointer;border:0;border-radius:10px;padding:8px 14px;color:white;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--purple));transition:0.3s}
+button{cursor:pointer;border:0;border-radius:10px;padding:8px 14px;color:white;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--purple));transition:0.3s;white-space:nowrap}
 button:hover{opacity:0.9}
 input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#090a12;color:white;font:inherit;outline:none}
 input:focus{border-color:var(--cyan)}
 
-.search-box{display:flex;gap:8px;margin-bottom:8px}
-.tabs{display:flex;gap:8px;margin-bottom:10px}
-.tab-btn{flex:1;background:rgba(255,255,255,0.04);color:var(--muted);font-size:0.78rem;padding:6px;border-radius:8px}
+.search-box{display:flex;gap:8px;margin-bottom:8px;width:100%}
+.tabs{display:flex;gap:8px;margin-bottom:10px;width:100%}
+.tab-btn{flex:1;background:rgba(255,255,255,0.04);color:var(--muted);font-size:0.78rem;padding:8px 6px;border-radius:8px;text-align:center}
 .tab-btn.active{background:var(--cyan);color:#000;font-weight:800}
 
-.layout{display:grid;grid-template-columns:1fr 350px;gap:14px;align-items:start}
-.panel{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;display:flex;flex-direction:column}
+.layout{display:grid;grid-template-columns:1fr 350px;gap:14px;align-items:start;width:100%}
+.panel{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;display:flex;flex-direction:column;width:100%;overflow:hidden}
 
-/* Results container strict fixed height to completely prevent page stretching & cutting */
-.results-container{height:380px;max-height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
+/* Fixed container stretching: Dynamic auto height with controlled scroll */
+.results-container{max-height:360px;min-height:100px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px;width:100%}
 .results-container::-webkit-scrollbar{width:4px}
 .results-container::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:4px}
 
-.track{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid rgba(255,255,255,0.05);border-radius:10px;cursor:pointer;background:rgba(255,255,255,0.02);flex-shrink:0}
+.track{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid rgba(255,255,255,0.05);border-radius:10px;cursor:pointer;background:rgba(255,255,255,0.02);width:100%}
 .track:hover{border-color:var(--cyan);background:rgba(255,255,255,0.06)}
-.track img{width:65px;height:45px;object-fit:cover;border-radius:6px;flex-shrink:0}
-.info{flex:1;min-width:0}
+.track img{width:60px;height:45px;object-fit:cover;border-radius:6px;flex-shrink:0}
+.info{flex:1;min-width:0;overflow:hidden}
 .title{font-weight:700;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.author{font-size:0.68rem;color:var(--muted)}
-.save-track-btn{background:none;color:var(--muted);padding:4px;font-size:0.95rem}
+.author{font-size:0.68rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.save-track-btn{background:none;color:var(--muted);padding:4px;font-size:0.95rem;flex-shrink:0}
 .save-track-btn.saved{color:var(--pink)}
 
-/* Player Panel */
-.player{text-align:center;display:flex;flex-direction:column;align-items:center}
-#player-title{font-weight:700;font-size:0.88rem;margin:4px 0 2px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#player-author{color:var(--muted);font-size:0.72rem;margin-bottom:6px}
+/* Player Panel Fixed Alignment */
+.player{text-align:center;display:flex;flex-direction:column;align-items:center;width:100%}
+#player-title{font-weight:700;font-size:0.88rem;margin:6px 0 2px;width:100%;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#player-author{color:var(--muted);font-size:0.72rem;margin-bottom:8px;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* Clean Standard Video Mode Container */
-.media-container{width:140px;height:140px;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);margin:4px auto 8px;box-shadow:0 6px 15px rgba(0,0,0,0.6);transition:all 0.3s ease;position:relative;background:#000;flex-shrink:0}
+/* Clean Media Container properly centered */
+.media-container{width:150px;height:150px;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);margin:4px auto 8px;box-shadow:0 6px 15px rgba(0,0,0,0.6);transition:all 0.3s ease;position:relative;background:#000;flex-shrink:0}
 .media-container.video-mode{width:100%;aspect-ratio:16/9;height:auto;border-radius:10px}
 .media-container img{width:100%;height:100%;object-fit:cover}
 .yt-shield{position:absolute;inset:0;z-index:10;pointer-events:auto;background:transparent}
 
 /* Synced Lyrics Box */
-.lyrics-box{width:100%;height:75px;overflow-y:auto;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px;font-size:0.72rem;color:var(--muted);margin-bottom:8px;text-align:center;line-height:1.4;scroll-behavior:smooth;flex-shrink:0}
+.lyrics-box{width:100%;height:75px;overflow-y:auto;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px;font-size:0.72rem;color:var(--muted);margin-bottom:8px;text-align:center;line-height:1.4;scroll-behavior:smooth}
 .lyrics-box::-webkit-scrollbar{width:3px}
 .lyrics-box::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:3px}
 .lyric-line{transition:0.3s;margin:2px 0}
 .lyric-line.active{color:var(--cyan);font-weight:700;transform:scale(1.02)}
 
-.progress-wrap{width:100%;margin-bottom:6px;flex-shrink:0}
+.progress-wrap{width:100%;margin-bottom:6px}
 #progress{width:100%;accent-color:var(--cyan);cursor:pointer}
 .times{display:flex;justify-content:space-between;color:var(--muted);font-size:0.68rem;margin-top:2px}
 
-.controls{display:flex;justify-content:center;align-items:center;gap:6px;margin:4px 0;flex-shrink:0}
-.ctrl-btn{background:none;border:none;color:#fff;font-size:0.85rem;cursor:pointer;padding:4px}
+.controls{display:flex;justify-content:center;align-items:center;gap:6px;margin:6px 0;width:100%}
+.ctrl-btn{background:none;border:none;color:#fff;font-size:0.85rem;cursor:pointer;padding:6px}
 .ctrl-btn.active-toggle{color:var(--cyan);background:rgba(0,243,255,0.15);border-radius:6px}
-#play{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));font-size:0.9rem;display:flex;align-items:center;justify-content:center}
+#play{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));font-size:0.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
-/* Loading Spinner Animation */
 .fa-spinner{animation:spin 1s linear infinite;}
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .secondary{background:#29243c}
 .secondary:hover{background:#3b3254}
 
-.dl-btn{width:100%;margin-top:4px;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.78rem;padding:8px;flex-shrink:0}
+.dl-btn{width:100%;margin-top:4px;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.78rem;padding:9px}
 
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;z-index:100}
-.modal-content{background:var(--card);border:1px solid var(--purple);border-radius:18px;padding:20px;max-width:320px;text-align:center;position:relative}
+.modal-content{background:var(--card);border:1px solid var(--purple);border-radius:18px;padding:20px;max-width:320px;width:100%;text-align:center;position:relative}
 
-@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:8px}}
+@media(max-width:850px){
+  .layout{grid-template-columns:1fr;display:flex;flex-direction:column}
+  .app{padding:8px}
+}
 </style>
 </head>
 <body>
 
 <canvas id="bg-canvas"></canvas>
 
-<!-- Hidden Audio Element for Mobile OS Background Playback Session Keep-Alive -->
+<!-- Hidden Audio Element for Background Playback Keep-Alive -->
 <audio id="bg-audio" loop style="display:none;"></audio>
 
 <div class="app">
@@ -127,12 +130,11 @@ input:focus{border-color:var(--cyan)}
 </section>
 
 <section class="panel player">
-  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:2px">
+  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:6px">
     <div style="color:var(--cyan);font-weight:700;font-size:0.75rem"><i class="fas fa-headphones"></i> NOW PLAYING</div>
     <button class="secondary" id="toggle-view-btn" style="padding:4px 8px;font-size:0.68rem;border-radius:6px"><i class="fas fa-video"></i> Show Video</button>
   </div>
 
-  <!-- Unified Media Container with Shield Overlay -->
   <div class="media-container" id="media-container">
     <img id="cover-art" src="https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg" alt="Cover">
     <div id="yt-player" style="width:100%;height:100%;display:none;"></div>
@@ -142,7 +144,6 @@ input:focus{border-color:var(--cyan)}
   <div id="player-title">Select a song</div>
   <div id="player-author">YouTube</div>
 
-  <!-- Animated Synced Lyrics Box -->
   <div class="lyrics-box" id="lyrics-display">
     <div class="lyric-line active">🎵 Lyrics will synchronize automatically...</div>
   </div>
@@ -203,7 +204,6 @@ let isShuffle = false;
 let autoNextEnabled = true;
 
 const bgAudio = $("bg-audio");
-// Silent audio loop buffer to prevent mobile browsers from sleeping/pausing playback session
 bgAudio.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
 
 const defaultTrending = [
@@ -406,13 +406,13 @@ async function fetchLyrics(songTitle){
         const lines = matched.plainLyrics.split("\n");
         box.innerHTML = lines.map(l => `<div class="lyric-line">${l}</div>`).join("");
       } else {
-        box.innerHTML = '<div class="lyric-line active">No lyrics available.</div>';
+        box.innerHTML = '<div class="lyric-line active">No lyrics available. Search online for full lyrics.</div>';
       }
     } else {
-      box.innerHTML = '<div class="lyric-line active">No lyrics found.</div>';
+      box.innerHTML = '<div class="lyric-line active">No lyrics found. Search online for full lyrics.</div>';
     }
   }catch(e){
-    box.innerHTML = '<div class="lyric-line active">Could not load lyrics.</div>';
+    box.innerHTML = '<div class="lyric-line active">Could not load lyrics. Search online for full lyrics.</div>';
   }
 }
 
