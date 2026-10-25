@@ -2,20 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Neon Wave Premium - Ultimate Audio Experience</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root{--bg:#06070d;--card:#121420;--cyan:#00f3ff;--pink:#ff007f;--purple:#9d00ff;--muted:#8b949e}
 *{box-sizing:border-box;margin:0;padding:0}
-html, body { height: 100vh; overflow: hidden; background: var(--bg); color: #f0f4f8; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* Page lock completely removed - fully scrollable */
+html, body {
+  min-height: 100vh;
+  height: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: #f0f4f8;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
 
 #bg-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
 
-.app{position:relative;z-index:1;max-width:1150px;height:100vh;margin:auto;padding:12px;display:flex;flex-direction:column;overflow:hidden}
+.app{position:relative;z-index:1;max-width:1150px;margin:auto;padding:12px;display:flex;flex-direction:column}
 
-header{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:12px 18px;margin-bottom:12px;backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+header{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:12px 18px;margin-bottom:12px;backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center}
 h1{font:900 1.2rem Orbitron,sans-serif;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
 button{cursor:pointer;border:0;border-radius:10px;padding:8px 14px;color:white;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--purple));transition:0.3s}
@@ -28,11 +38,11 @@ input:focus{border-color:var(--cyan)}
 .tab-btn{flex:1;background:rgba(255,255,255,0.04);color:var(--muted);font-size:0.78rem;padding:6px;border-radius:8px}
 .tab-btn.active{background:var(--cyan);color:#000;font-weight:800}
 
-.layout{display:grid;grid-template-columns:1fr 350px;gap:14px;flex:1;min-height:0;align-items:stretch}
-.panel{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.layout{display:grid;grid-template-columns:1fr 350px;gap:14px;align-items:start}
+.panel{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;display:flex;flex-direction:column}
 
-/* Results Column inside panel */
-.results-container{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px;min-height:0}
+/* Results Column */
+.results-container{max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
 .results-container::-webkit-scrollbar{width:4px}
 .results-container::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:4px}
 
@@ -46,14 +56,25 @@ input:focus{border-color:var(--cyan)}
 .save-track-btn.saved{color:var(--pink)}
 
 /* Player Panel */
-.player{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow-y:auto}
+.player{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:space-between}
 #player-title{font-weight:700;font-size:0.88rem;margin:4px 0 2px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #player-author{color:var(--muted);font-size:0.72rem;margin-bottom:6px}
 
-/* Clean Video Mode & Cover Container */
+/* Clean Video Box with Heavy Crop to completely remove YT overlays */
 .media-container{width:140px;height:140px;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);margin:4px auto 8px;box-shadow:0 6px 15px rgba(0,0,0,0.6);transition:all 0.3s ease;position:relative;background:#000;flex-shrink:0}
 .media-container.video-mode{width:100%;aspect-ratio:16/9;height:auto;border-radius:10px}
 .media-container img{width:100%;height:100%;object-fit:cover}
+
+.yt-player-host{width:100%;height:100%;position:relative;overflow:hidden}
+.yt-player-host iframe{
+  width: 100% !important;
+  height: 100% !important;
+  border: 0 !important;
+}
+.media-container.video-mode .yt-player-host iframe {
+  transform: scale(1.75) !important; /* Crops out all YouTube controls and headers completely */
+  transform-origin: center center;
+}
 .yt-shield{position:absolute;inset:0;z-index:10;pointer-events:auto;background:transparent}
 
 /* Synced Lyrics Box */
@@ -84,9 +105,7 @@ input:focus{border-color:var(--cyan)}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;z-index:100}
 .modal-content{background:var(--card);border:1px solid var(--purple);border-radius:18px;padding:20px;max-width:320px;text-align:center;position:relative}
 
-#yt-background-container{position:fixed;bottom:0;left:0;width:1px;height:1px;opacity:0.01;z-index:9999;pointer-events:none}
-
-@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:8px;height:100vh;overflow-y:auto}}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:8px}}
 </style>
 </head>
 <body>
@@ -121,10 +140,12 @@ input:focus{border-color:var(--cyan)}
     <button class="secondary" id="toggle-view-btn" style="padding:4px 8px;font-size:0.68rem;border-radius:6px"><i class="fas fa-video"></i> Show Video</button>
   </div>
 
-  <!-- Unified Media Box with Shield Overlay for Clean Video Mode -->
+  <!-- Unified Media Container -->
   <div class="media-container" id="media-container">
     <img id="cover-art" src="https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg" alt="Cover">
-    <div id="yt-player" style="width:100%;height:100%;display:none;"></div>
+    <div class="yt-player-host" id="yt-player-host" style="display:none;">
+      <div id="yt-player"></div>
+    </div>
     <div class="yt-shield" id="yt-shield" style="display:none;"></div>
   </div>
 
@@ -166,7 +187,7 @@ input:focus{border-color:var(--cyan)}
 
     <h2 style="font-family:Orbitron;color:var(--cyan);font-size:1rem;margin-bottom:2px">NEON WAVE</h2>
     <p style="color:var(--pink);font-weight:700;font-size:0.8rem;margin-bottom:4px">Developed by Tarun</p>
-    <p style="color:var(--muted);font-size:0.72rem;line-height:1.3;margin-bottom:12px">Neon Wave Premium — Clean unified player, synchronized lyrics, fixed layout, and background playback.</p>
+    <p style="color:var(--muted);font-size:0.72rem;line-height:1.3;margin-bottom:12px">Neon Wave Premium — Clean video rendering, synchronized lyrics, responsive layout, and background playback.</p>
     
     <a href="https://www.instagram.com/tarun.amv?mdxt=bXZndmRvN3Q1d2No" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;border-radius:18px;text-decoration:none;font-weight:700;font-size:0.75rem;">
       <i class="fab fa-instagram"></i> Follow @tarun.amv
@@ -413,7 +434,7 @@ function renderResults(){
     return;
   }
 
-displayList.forEach((track,i)=>{
+  displayList.forEach((track,i)=>{
     const card = document.createElement("div");
     card.className = "track";
 
@@ -485,25 +506,25 @@ $("tab-playlist").addEventListener("click",()=>{
   renderResults();
 });
 
-// Toggle Clean Video Mode with Shield Overlay
+// Clean Video Mode Toggle with Heavy Crop to hide YouTube title/controls
 $("toggle-view-btn").addEventListener("click",()=>{
   isVideoMode = !isVideoMode;
   const container = $("media-container");
   const img = $("cover-art");
-  const ytDiv = $("yt-player");
+  const ytHost = $("yt-player-host");
   const shield = $("yt-shield");
   const lyricsBox = $("lyrics-display");
 
   if(isVideoMode){
     container.classList.add("video-mode");
     img.style.display = "none";
-    ytDiv.style.display = "block";
+    ytHost.style.display = "block";
     shield.style.display = "block";
     lyricsBox.style.display = "none";
     $("toggle-view-btn").innerHTML = '<i class="fas fa-headphones"></i> Show Lyrics';
   } else {
     container.classList.remove("video-mode");
-    ytDiv.style.display = "none";
+    ytHost.style.display = "none";
     shield.style.display = "none";
     img.style.display = "block";
     lyricsBox.style.display = "block";
@@ -511,21 +532,18 @@ $("toggle-view-btn").addEventListener("click",()=>{
   }
 });
 
-// Shuffle Toggle Button
 $("shuffle-btn").addEventListener("click",()=>{
   isShuffle = !isShuffle;
   $("shuffle-btn").classList.toggle("active-toggle", isShuffle);
   setStatus(isShuffle ? "Shuffle Mode ON" : "Shuffle Mode OFF");
 });
 
-// Auto-Next Toggle Button
 $("autonext-btn").addEventListener("click",()=>{
   autoNextEnabled = !autoNextEnabled;
   $("autonext-btn").classList.toggle("active-toggle", autoNextEnabled);
   setStatus(autoNextEnabled ? "Auto-Next ON" : "Auto-Next OFF");
 });
 
-// 5 Seconds Skip Backward & Forward
 $("seek-back").addEventListener("click",()=>{
   if(player && ready){
     const curr = player.getCurrentTime() || 0;
@@ -614,7 +632,7 @@ $("progress").addEventListener("change",()=>{
   if(duration) player.seekTo(duration * Number($("progress").value)/100,true);
 });
 
-// Auto-Paste YouTube Link into Download Mirror format: https://good-enough-gallery.pl/#u=https://youtu.be/...
+// Download auto-paste format link
 $("dl-btn").addEventListener("click",()=>{
   const targetList = activeTab === "search" ? currentList : savedPlaylist;
   if(index < 0 || !targetList[index]){ alert("Please play or select a song first!"); return; }
@@ -628,7 +646,7 @@ $("dev-btn").addEventListener("click",()=>{$("modal").style.display="flex";});
 $("close-modal").addEventListener("click",()=>{$("modal").style.display="none";});
 $("modal").addEventListener("click",e=>{ if(e.target === $("modal")) $("modal").style.display="none"; });
 
-// Background Particles
+// Background Animated Canvas
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 let pts = [];
@@ -652,3 +670,4 @@ draw();
 <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
+  
