@@ -104,7 +104,7 @@ input:focus{border-color:var(--cyan)}
 
 <canvas id="bg-canvas"></canvas>
 
-<!-- Hidden Audio Element for Background Playback Keep-Alive -->
+<!-- Hidden Audio Element for Screen-Off & Background Playback Keep-Alive -->
 <audio id="bg-audio" loop style="display:none;"></audio>
 
 <div class="app">
@@ -205,6 +205,13 @@ let autoNextEnabled = true;
 
 const bgAudio = $("bg-audio");
 bgAudio.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
+
+// Prevent mobile browser from suspending audio when screen turns off or app is minimized
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && player && player.getPlayerState && player.getPlayerState() === YT.PlayerState.PLAYING) {
+    bgAudio.play().catch(() => {});
+  }
+});
 
 const defaultTrending = [
   { id: 'HNdauINck9s', title: 'Trending Hindi Mashup 2026', author: 'COZI Music', thumb: 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg' },
@@ -345,10 +352,16 @@ function initMediaSession(){
   if(!('mediaSession' in navigator)) return;
   
   navigator.mediaSession.setActionHandler('play', () => {
-    if(ready && player) player.playVideo();
+    if(ready && player) {
+      player.playVideo();
+      bgAudio.play().catch(() => {});
+    }
   });
   navigator.mediaSession.setActionHandler('pause', () => {
-    if(ready && player) player.pauseVideo();
+    if(ready && player) {
+      player.pauseVideo();
+      bgAudio.pause();
+    }
   });
   navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
   navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
