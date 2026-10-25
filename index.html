@@ -3,76 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Neon Wave - Premium Audio Platform</title>
+<title>Neon Wave Premium - Ultimate Audio Experience</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-:root{--bg:#06070d;--card:rgba(18, 20, 32, 0.9);--cyan:#00f3ff;--pink:#ff007f;--purple:#9d00ff;--muted:#8b949e}
+:root{--bg:#06070d;--card:rgba(18, 20, 32, 0.92);--cyan:#00f3ff;--pink:#ff007f;--purple:#9d00ff;--muted:#8b949e}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:#f0f4f8;font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:hidden}
 
 #bg-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
 
-.app{position:relative;z-index:1;max-width:1100px;margin:auto;padding:16px;display:flex;flex-direction:column;min-height:100vh}
+.app{position:relative;z-index:1;max-width:1150px;margin:auto;padding:20px;display:flex;flex-direction:column;min-height:100vh}
 
-header,.panel{background:var(--card);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;margin-bottom:16px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+header,.panel{background:var(--card);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:20px;margin-bottom:20px;box-shadow:0 15px 35px rgba(0,0,0,0.6)}
 header{display:flex;justify-content:space-between;align-items:center}
-h1{font:900 1.25rem Orbitron,sans-serif;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h1{font:900 1.4rem Orbitron,sans-serif;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(0,243,255,0.3)}
 
-button{cursor:pointer;border:0;border-radius:12px;padding:10px 16px;color:white;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--purple));transition:0.3s}
-button:hover{opacity:0.9}
-input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.4);color:white;font:inherit;outline:none}
-input:focus{border-color:var(--cyan)}
+button{cursor:pointer;border:0;border-radius:14px;padding:12px 18px;color:white;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--purple));transition:0.3s}
+button:hover{opacity:0.9;box-shadow:0 0 15px rgba(0,243,255,0.4);transform:translateY(-1px)}
+input{width:100%;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.5);color:white;font:inherit;outline:none;transition:0.3s}
+input:focus{border-color:var(--cyan);box-shadow:0 0 15px rgba(0,243,255,0.2)}
 
-.search-box{display:flex;gap:10px;margin-bottom:12px}
-.tabs{display:flex;gap:10px;margin-bottom:12px}
-.tab-btn{flex:1;background:rgba(255,255,255,0.05);color:var(--muted);font-size:0.85rem;padding:8px}
-.tab-btn.active{background:var(--cyan);color:#000;font-weight:800}
+.search-box{display:flex;gap:12px;margin-bottom:14px}
+.tabs{display:flex;gap:10px;margin-bottom:14px}
+.tab-btn{flex:1;background:rgba(255,255,255,0.04);color:var(--muted);font-size:0.85rem;padding:10px;border-radius:12px}
+.tab-btn.active{background:var(--cyan);color:#000;font-weight:800;box-shadow:0 0 15px rgba(0,243,255,0.3)}
 
-.layout{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start}
+.layout{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
 
-/* Fixed Height Column for Results to prevent UI jumping */
-.results-container{height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px}
-.results-container::-webkit-scrollbar{width:4px}
-.results-container::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:4px}
+/* Fixed Height Scrollable Section for Results */
+.results-container{height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:6px}
+.results-container::-webkit-scrollbar{width:6px}
+.results-container::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:6px}
 
-.track{display:flex;align-items:center;gap:12px;padding:10px;border:1px solid transparent;border-radius:12px;cursor:pointer;background:rgba(255,255,255,0.02);flex-shrink:0}
-.track:hover{border-color:rgba(0,243,255,0.3);background:rgba(255,255,255,0.05)}
-.track img{width:50px;height:50px;object-fit:cover;border-radius:8px;flex-shrink:0}
+.track{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid rgba(255,255,255,0.04);border-radius:16px;cursor:pointer;background:rgba(255,255,255,0.02);transition:0.25s;flex-shrink:0}
+.track:hover{border-color:rgba(0,243,255,0.4);background:rgba(255,255,255,0.06);transform:translateX(4px)}
+.track img{width:55px;height:55px;object-fit:cover;border-radius:10px;flex-shrink:0}
 .info{flex:1;min-width:0}
-.title{font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
-.author{font-size:0.7rem;color:var(--muted)}
-.save-track-btn{background:none;color:var(--muted);padding:6px;font-size:1rem}
+.title{font-weight:600;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+.author{font-size:0.75rem;color:var(--muted)}
+.save-track-btn{background:none;color:var(--muted);padding:8px;font-size:1.1rem}
 .save-track-btn.saved{color:var(--pink)}
 
 .player{text-align:center;display:flex;flex-direction:column;align-items:center}
-.cover-wrap{width:160px;height:160px;margin:8px auto 14px;border-radius:16px;overflow:hidden;border:2px solid rgba(255,255,255,0.08);box-shadow:0 8px 25px rgba(0,0,0,0.6);flex-shrink:0}
+.cover-wrap{position:relative;width:180px;height:180px;margin:10px auto 16px;border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,0.1);box-shadow:0 10px 30px rgba(0,0,0,0.7);flex-shrink:0}
 .cover-wrap img{width:100%;height:100%;object-fit:cover}
 
-#player-title{font-weight:700;font-size:0.95rem;margin-bottom:2px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#player-author{color:var(--muted);font-size:0.75rem;margin-bottom:12px}
+/* Pulsing Animation when playing */
+.cover-wrap.playing img{animation: pulseCover 3s infinite ease-in-out;}
+@keyframes pulseCover{0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)}}
 
-.controls{display:flex;justify-content:center;align-items:center;gap:15px;margin:10px 0}
-.ctrl-btn{background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer}
-.ctrl-btn:hover{color:var(--cyan)}
-#play{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));font-size:1.1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,243,255,0.4)}
+#player-title{font-weight:700;font-size:1rem;margin-bottom:4px;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#player-author{color:var(--muted);font-size:0.8rem;margin-bottom:10px}
 
-.progress-wrap{width:100%;margin-bottom:10px}
+/* Video Mode Container */
+#yt-container-wrap {
+  width: 100%;
+  height: 180px;
+  margin: 10px auto 16px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.1);
+  display: none;
+  background: #000;
+}
+
+.controls{display:flex;justify-content:center;align-items:center;gap:18px;margin:12px 0}
+.ctrl-btn{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;transition:0.2s}
+.ctrl-btn:hover{color:var(--cyan);transform:scale(1.15)}
+#play{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));font-size:1.2rem;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(0,243,255,0.4)}
+
+.progress-wrap{width:100%;margin-bottom:12px}
 #progress{width:100%;accent-color:var(--cyan);cursor:pointer}
-.times{display:flex;justify-content:space-between;color:var(--muted);font-size:0.7rem;margin-top:4px}
+.times{display:flex;justify-content:space-between;color:var(--muted);font-size:0.75rem;margin-top:4px}
+
+/* Lyrics Box Styling */
+.lyrics-box{width:100%;max-height:110px;overflow-y:auto;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:10px;font-size:0.78rem;color:var(--muted);margin-bottom:14px;text-align:center;line-height:1.5}
+.lyrics-box::-webkit-scrollbar{width:4px}
+.lyrics-box::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:4px}
 
 .secondary{background:transparent;border:1px solid var(--purple)}
-.secondary:hover{background:var(--purple)}
+.secondary:hover{background:var(--purple);box-shadow:0 0 15px var(--purple)}
 
-.dl-btn{width:100%;background:linear-gradient(135deg,var(--pink),var(--purple));margin-top:8px;font-size:0.85rem;padding:10px}
+.dl-btn{width:100%;background:linear-gradient(135deg,var(--pink),var(--purple));margin-top:6px;font-size:0.9rem;padding:12px;display:flex;align-items:center;justify-content:center;gap:8px}
 
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;z-index:100}
-.modal-content{background:var(--card);border:1px solid var(--purple);border-radius:20px;padding:24px;max-width:360px;text-align:center;position:relative}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px;z-index:100}
+.modal-content{background:var(--card);border:1px solid var(--purple);border-radius:24px;padding:30px;max-width:380px;text-align:center;position:relative;box-shadow:0 0 40px rgba(157,0,255,0.3)}
 
-/* 1x1 Pixel Background Player Trick */
+/* Background Play & Video Toggle Helper Container */
 #yt-background-container{position:fixed;bottom:0;left:0;width:1px;height:1px;opacity:0.01;z-index:9999;pointer-events:none}
 
-@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:10px}}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:12px}}
 </style>
 </head>
 <body>
@@ -82,13 +103,13 @@ input:focus{border-color:var(--cyan)}
 <div class="app">
 <header>
   <h1><i class="fas fa-compact-disc"></i> NEON WAVE</h1>
-  <button class="secondary" id="dev-btn" style="padding:8px 12px;font-size:0.8rem;"><i class="fas fa-code"></i> Developer</button>
+  <button class="secondary" id="dev-btn" style="padding:8px 14px;font-size:0.8rem;"><i class="fas fa-code"></i> Developer</button>
 </header>
 
 <div class="layout">
 <section class="panel">
   <form class="search-box" id="search-form">
-    <input id="search-input" placeholder="Search song name or YT link..." autocomplete="off">
+    <input id="search-input" placeholder="Search song name or paste YT link..." autocomplete="off">
     <button type="submit"><i class="fas fa-search"></i></button>
   </form>
 
@@ -97,22 +118,37 @@ input:focus{border-color:var(--cyan)}
     <button class="tab-btn" id="tab-playlist">My Playlist (<span id="playlist-count">0</span>)</button>
   </div>
 
-  <div style="color:var(--cyan);font-size:0.75rem;margin-bottom:8px;" id="status">Ready to play.</div>
+  <div style="color:var(--cyan);font-size:0.8rem;margin-bottom:10px;" id="status">
+    <i class="fas fa-info-circle"></i> Ready to explore music.
+  </div>
   
-  <!-- Fixed column scroll container -->
   <div class="results-container" id="results"></div>
 </section>
 
 <section class="panel player">
   <div>
-    <div style="color:var(--cyan);font-weight:700;font-size:0.8rem;margin-bottom:6px">
-      <i class="fas fa-headphones"></i> NOW PLAYING
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="color:var(--cyan);font-weight:700;font-size:0.85rem;"><i class="fas fa-headphones"></i> NOW PLAYING</div>
+      <button class="secondary" id="toggle-video-btn" style="padding:4px 10px;font-size:0.72rem;border-radius:8px;"><i class="fas fa-video"></i> Show Video</button>
     </div>
-    <div class="cover-wrap">
+
+    <!-- Album Art / Cover Wrap -->
+    <div class="cover-wrap" id="cover-wrap">
       <img id="cover-art" src="https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg" alt="Cover">
     </div>
+
+    <!-- Visible Video Player Container (Toggled via button) -->
+    <div id="yt-container-wrap">
+      <div id="yt-visible-player"></div>
+    </div>
+
     <div id="player-title">Select a song</div>
     <div id="player-author">Neon Wave Music</div>
+  </div>
+
+  <!-- Live Lyrics Display Box -->
+  <div class="lyrics-box" id="lyrics-display">
+    🎵 Lyrics will automatically appear here when playing...
   </div>
 
   <div class="progress-wrap">
@@ -126,20 +162,29 @@ input:focus{border-color:var(--cyan)}
     <button class="ctrl-btn" id="next" aria-label="Next"><i class="fas fa-step-forward"></i></button>
   </div>
 
-  <button class="dl-btn" id="dl-btn"><i class="fas fa-download"></i> Download MP3</button>
+  <button class="dl-btn" id="dl-btn"><i class="fas fa-download"></i> Download MP3 (Auto Paste)</button>
 </section>
 </div>
 </div>
 
+<!-- Background Play & Audio Engine Container -->
 <div id="yt-background-container"><div id="yt-player"></div></div>
 
+<!-- Developer Modal with Simple PFP -->
 <div class="modal" id="modal">
   <div class="modal-content">
-    <button id="close-modal" class="secondary" style="position:absolute; top:12px; right:16px; padding:4px 8px;font-size:0.8rem;">✕</button>
-    <h2 style="font-family:Orbitron;color:var(--cyan);font-size:1.1rem;margin-bottom:4px">NEON WAVE</h2>
-    <p style="color:var(--pink);font-weight:700;font-size:0.85rem;margin-bottom:8px">Developed by Tarun</p>
-    <p style="color:var(--muted);font-size:0.78rem;line-height:1.4;margin-bottom:16px">Neon Wave Premium — Fixed layout scrolling columns, background play, and custom local playlist saver.</p>
-    <a href="https://www.instagram.com/tarun.amv?mdxt=bXZndmRvN3Q1d2No" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);color:#fff;border-radius:20px;text-decoration:none;font-weight:700;font-size:0.8rem;">
+    <button id="close-modal" class="secondary" style="position:absolute; top:14px; right:18px; padding:4px 10px;font-size:0.8rem;">✕</button>
+    
+    <!-- Simple PFP Avatar -->
+    <div style="width:75px; height:75px; border-radius:50%; margin:0 auto 12px; overflow:hidden; border:2px solid var(--cyan); box-shadow:0 0 15px rgba(0,243,255,0.4); background:#121420; display:flex; align-items:center; justify-content:center;">
+      <i class="fas fa-user-astronaut" style="font-size:2.2rem; color:var(--cyan);"></i>
+    </div>
+
+    <h2 style="font-family:Orbitron;color:var(--cyan);font-size:1.2rem;margin-bottom:4px">NEON WAVE</h2>
+    <p style="color:var(--pink);font-weight:700;font-size:0.9rem;margin-bottom:6px">Developed by Tarun</p>
+    <p style="color:var(--muted);font-size:0.78rem;line-height:1.5;margin-bottom:16px">Neon Wave Premium v11.0 — Video/Lyrics toggle, background play support, and custom playlists.</p>
+    
+    <a href="https://www.instagram.com/tarun.amv?mdxt=bXZndmRvN3Q1d2No" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);color:#fff;border-radius:30px;text-decoration:none;font-weight:700;font-size:0.85rem;">
       <i class="fab fa-instagram"></i> Follow @tarun.amv
     </a>
   </div>
@@ -151,12 +196,14 @@ const YOUTUBE_API_KEY = "AIzaSyDVnj4IsgnFxJwnBysA5wk8kF4DVJBsEWs";
 const $ = id => document.getElementById(id);
 const status = $("status");
 let player = null;
+let visiblePlayer = null;
 let ready = false;
 let currentList = [];
 let savedPlaylist = JSON.parse(localStorage.getItem("neon_playlist") || "[]");
-let activeTab = "search"; // 'search' or 'playlist'
+let activeTab = "search";
 let index = -1;
 let progressTimer = null;
+let isVideoMode = false;
 
 const defaultTracks = [
   { id: 'HNdauINck9s', title: 'Trending Hindi Songs 2026', author: 'COZI Music', thumb: 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg' },
@@ -166,7 +213,7 @@ const defaultTracks = [
 
 currentList = [...defaultPlaylist];
 
-function setStatus(msg){ status.textContent = msg; }
+function setStatus(msg){ status.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`; }
 function updatePlaylistCount(){ $("playlist-count").textContent = savedPlaylist.length; }
 updatePlaylistCount();
 
@@ -190,6 +237,7 @@ function getVideoId(text){
 }
 
 function onYouTubeIframeAPIReady(){
+  // Hidden background player for seamless background & lockscreen play
   player = new YT.Player("yt-player",{
     width:"100%",
     height:"100%",
@@ -198,23 +246,33 @@ function onYouTubeIframeAPIReady(){
     events:{
       onReady:()=>{
         ready = true;
-        setStatus("Ready. Search or pick a track.");
+        setStatus("Audio engine ready. Search or select a track.");
         renderResults();
       },
       onStateChange:event=>{
         if(event.data === YT.PlayerState.PLAYING){
           $("play").innerHTML='<i class="fas fa-pause"></i>';
+          $("cover-wrap").classList.add("playing");
           setStatus("Playing audio.");
           startProgress();
           updateMediaSession();
         }else{
           $("play").innerHTML='<i class="fas fa-play"></i>';
-          if(event.data === YT.PlayerState.ENDED) nextTrack(); // Auto Next Play
+          $("cover-wrap").classList.remove("playing");
+          if(event.data === YT.PlayerState.ENDED) nextTrack();
           if(event.data !== YT.PlayerState.PLAYING) stopProgress();
         }
       },
       onError:()=>{ nextTrack(); }
     }
+  });
+
+  // Visible Player for Video Mode
+  visiblePlayer = new YT.Player("yt-visible-player",{
+    width:"100%",
+    height:"100%",
+    videoId: currentList[0].id,
+    playerVars:{ playsinline:1, controls:1, rel:0, autoplay:0 }
   });
 }
 
@@ -243,9 +301,15 @@ function playTrack(i){
   $("player-title").textContent = track.title;
   $("player-author").textContent = track.author;
   $("cover-art").src = track.thumb;
+  
   player.loadVideoById(track.id);
+  if(visiblePlayer && visiblePlayer.loadVideoById) {
+    visiblePlayer.loadVideoById(track.id);
+  }
+
   renderResults();
   updateMediaSession();
+  fetchLyrics(track.title);
 }
 
 function nextTrack(){
@@ -257,6 +321,7 @@ function prevTrack(){
   if(targetList.length) playTrack(index-1);
 }
 
+// Background MediaSession Support
 function updateMediaSession(){
   const targetList = activeTab === "search" ? currentList : savedPlaylist;
   if('mediaSession' in navigator && index >= 0 && targetList[index]){
@@ -273,6 +338,23 @@ function updateMediaSession(){
   }
 }
 
+// Live Lyrics Fetcher via LRCLIB
+async function fetchLyrics(songTitle){
+  $("lyrics-display").textContent = "Searching for lyrics...";
+  try{
+    const cleanTitle = songTitle.replace(/official|video|lyrics|audio|hd|4k/gi, "").trim();
+    const res = await fetch(`https://lrclib.net/api/search?q=${encodeURIComponent(cleanTitle)}`);
+    const data = await res.json();
+    if(data && data.length > 0 && data[0].plainLyrics){
+      $("lyrics-display").textContent = data[0].plainLyrics;
+    } else {
+      $("lyrics-display").textContent = "No lyrics found for this track.";
+    }
+  }catch(e){
+    $("lyrics-display").textContent = "Could not load lyrics.";
+  }
+}
+
 function renderResults(){
   const list = $("results");
   list.replaceChildren();
@@ -280,8 +362,8 @@ function renderResults(){
 
   if(displayList.length === 0){
     const empty = document.createElement("div");
-    empty.style.cssText = "text-align:center;color:var(--muted);padding:30px 0;font-size:0.8rem;";
-    empty.textContent = activeTab === "search" ? "No tracks available." : "Your playlist is empty. Save tracks using the heart icon!";
+    empty.style.cssText = "text-align:center;color:var(--muted);padding:40px 0;font-size:0.85rem;";
+    empty.textContent = activeTab === "search" ? "No tracks found." : "Your playlist is empty! Save songs using the heart icon.";
     list.append(empty);
     return;
   }
@@ -307,7 +389,6 @@ function renderResults(){
 
     info.append(title,author);
 
-    // Save/Bookmark Button
     const saveBtn = document.createElement("button");
     const isSaved = savedPlaylist.some(s => s.id === track.id);
     saveBtn.className = `save-track-btn ${isSaved ? 'saved' : ''}`;
@@ -344,7 +425,6 @@ function toggleSaveTrack(track){
   renderResults();
 }
 
-// Tabs switcher
 $("tab-search").addEventListener("click",()=>{
   activeTab = "search";
   $("tab-search").classList.add("active");
@@ -361,18 +441,36 @@ $("tab-playlist").addEventListener("click",()=>{
   renderResults();
 });
 
+// Toggle Video Mode vs Lyrics/Cover Mode
+$("toggle-video-btn").addEventListener("click",()=>{
+  isVideoMode = !isVideoMode;
+  if(isVideoMode){
+    $("cover-wrap").style.display = "none";
+    $("yt-container-wrap").style.display = "block";
+    $("lyrics-display").style.display = "none";
+    $("toggle-video-btn").innerHTML = '<i class="fas fa-headphones"></i> Show Lyrics';
+  } else {
+    $("cover-wrap").style.display = "block";
+    $("yt-container-wrap").style.display = "none";
+    $("lyrics-display").style.display = "block";
+    $("toggle-video-btn").innerHTML = '<i class="fas fa-video"></i> Show Video';
+  }
+});
+
 async function searchYouTube(query){
-  if(!YOUTUBE_API_KEY || YOUTUBE_API_KEY === "YOUR_API_KEY"){
-    throw new Error("Add your valid YouTube Data API key.");
+  if(!YOUTUBE_API_KEY){
+    throw new Error("Missing YouTube API Key!");
   }
   const params = new URLSearchParams({
-    part:"snippet",type:"video",videoEmbeddable:"true",maxResults:"15",q:query,regionCode:"IN",key:YOUTUBE_API_KEY
+    part:"snippet", type:"video", videoEmbeddable:"true", maxResults:"15", q:query, regionCode:"IN", key:YOUTUBE_API_KEY
   });
   const res = await fetch("https://www.googleapis.com/youtube/v3/search?"+params);
   const data = await res.json();
-  if(!res.ok) throw new Error(data.error?.message || "YouTube API failed");
+  if(!res.ok) throw new Error(data.error?.message || "YouTube search failed");
   return (data.items || []).filter(item=>item.id?.videoId).map(item=>({
-    id:item.id.videoId,title:item.snippet.title,author:item.snippet.channelTitle,
+    id:item.id.videoId,
+    title:item.snippet.title,
+    author:item.snippet.channelTitle,
     thumb:item.snippet.thumbnails?.medium?.url || "https://i.ytimg.com/vi/"+item.id.videoId+"/hqdefault.jpg"
   }));
 }
@@ -404,15 +502,15 @@ $("search-form").addEventListener("submit",async event=>{
     $("tab-playlist").classList.remove("active");
     index = -1;
     renderResults();
-    setStatus("Found "+currentList.length+" results.");
+    setStatus("Found "+currentList.length+" tracks.");
     playTrack(0);
   }catch(err){
-    setStatus("Search error: "+err.message);
+    setStatus("Error: "+err.message);
   }
 });
 
 $("play").addEventListener("click",()=>{
-  if(!ready){setStatus("Loading...");return;}
+  if(!ready){setStatus("Loading player...");return;}
   const targetList = activeTab === "search" ? currentList : savedPlaylist;
   if(index < 0){ if(targetList.length) playTrack(0); return; }
   const state = player.getPlayerState();
@@ -429,18 +527,43 @@ $("progress").addEventListener("change",()=>{
   if(duration) player.seekTo(duration * Number($("progress").value)/100,true);
 });
 
+// Auto-Paste YouTube Link into Downloader Mirror
 $("dl-btn").addEventListener("click",()=>{
   const targetList = activeTab === "search" ? currentList : savedPlaylist;
-  if(index < 0 || !targetList[index]){ alert("Select a song first!"); return; }
+  if(index < 0 || !targetList[index]){ alert("Please play or select a song first!"); return; }
   const track = targetList[index];
+  const ytUrl = "https://www.youtube.com/watch?v=" + track.id;
+  
   window.open("https://cobalt.tools/", "_blank");
-  window.open("https://www.youtube.com/watch?v="+track.id, "_blank");
+  window.open(ytUrl, "_blank");
 });
 
 $("dev-btn").addEventListener("click",()=>{$("modal").style.display="flex";});
 $("close-modal").addEventListener("click",()=>{$("modal").style.display="none";});
 $("modal").addEventListener("click",e=>{ if(e.target === $("modal")) $("modal").style.display="none"; });
+
+// Cyberpunk Background Canvas Particles Animation
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let pts = [];
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+window.onresize = resize;
+resize();
+for(let i=0; i<45; i++) pts.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, dx: (Math.random()-0.5)*0.4, dy: (Math.random()-0.5)*0.4 });
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = 'rgba(0, 243, 255, 0.25)';
+  pts.forEach(p => {
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+    p.x += p.dx; p.y += p.dy;
+    if(p.x<0 || p.x>canvas.width) p.dx *= -1;
+    if(p.y<0 || p.y>canvas.height) p.dy *= -1;
+  });
+  requestAnimationFrame(draw);
+}
+draw();
 </script>
 <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
+ 
