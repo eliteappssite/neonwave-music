@@ -10,7 +10,7 @@
 :root{--bg:#06070d;--card:#121420;--cyan:#00f3ff;--pink:#ff007f;--purple:#9d00ff;--muted:#8b949e}
 *{box-sizing:border-box;margin:0;padding:0}
 
-/* Page fully free scrollable, no locking */
+/* Completely free vertical page scrolling, zero lock */
 html, body {
   min-height: 100vh;
   height: auto !important;
@@ -23,7 +23,7 @@ html, body {
 
 #bg-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
 
-.app{position:relative;z-index:1;max-width:1150px;margin:auto;padding:12px;display:flex;flex-direction:column;min-height:100vh}
+.app{position:relative;z-index:1;max-width:1150px;margin:auto;padding:12px;display:flex;flex-direction:column}
 
 header{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:12px 18px;margin-bottom:12px;backdrop-filter:blur(16px);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 h1{font:900 1.2rem Orbitron,sans-serif;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -41,8 +41,8 @@ input:focus{border-color:var(--cyan)}
 .layout{display:grid;grid-template-columns:1fr 350px;gap:14px;align-items:start}
 .panel{background:rgba(18,20,32,.95);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;display:flex;flex-direction:column}
 
-/* Results Column with fixed max-height to prevent page cutting/stretching */
-.results-container{max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
+/* Results container strict fixed height to completely prevent page stretching & cutting */
+.results-container{height:380px;max-height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
 .results-container::-webkit-scrollbar{width:4px}
 .results-container::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:4px}
 
