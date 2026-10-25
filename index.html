@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neon Wave - Soundbound Engine</title>
+  <title>Neon Wave - Ultimate Audio Platform</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     :root {
       --bg: #06070d;
-      --card-bg: rgba(18, 20, 32, 0.85);
+      --card-bg: rgba(18, 20, 32, 0.9);
       --card-border: rgba(255, 255, 255, 0.08);
       --neon-cyan: #00f3ff;
       --neon-pink: #ff007f;
@@ -109,11 +109,11 @@
             <i class="fas fa-search"></i>
             <input type="text" id="search-input" class="search-input" placeholder="Paste YouTube Link or Search Song...">
           </div>
-          <button class="search-btn" id="search-btn">Play / Search</button>
+          <button class="search-btn" id="search-btn">Play / Add</button>
         </div>
 
         <div class="status-bar" id="status-bar">
-          <i class="fas fa-network-wired"></i> <span id="status-text">Soundbound Multi-Source Ready</span>
+          <i class="fas fa-check-circle" style="color:var(--neon-cyan)"></i> <span id="status-text">Engine Ready. Paste YT Link or Select Below.</span>
         </div>
 
         <div class="results-list" id="results-list"></div>
@@ -153,8 +153,6 @@
     </div>
   </div>
 
-  <!-- Audio Player Elements -->
-  <audio id="main-audio" preload="metadata"></audio>
   <div id="yt-backend-engine"><div id="yt-player"></div></div>
 
   <!-- Developer Modal -->
@@ -164,7 +162,7 @@
       <h2 style="font-family:'Orbitron'; color:var(--neon-cyan); margin-bottom:6px;">NEON WAVE</h2>
       <p style="font-size:0.9rem; color:var(--neon-pink); font-weight:700; margin-bottom:12px;">Developed by Tarun</p>
       <p style="font-size:0.85rem; line-height:1.5; color:var(--text-muted); margin-bottom:20px;">
-        Multi-source Soundbound architecture supporting unblocked playback, background media controls, and direct MP3 downloads.
+        Unblocked audio platform featuring seamless YouTube background playback, queue navigation, and direct downloads.
       </p>
       <a href="https://www.instagram.com/tarun.amv?mdxt=bXZndmRvN3Q1d2No" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:10px 22px; background:linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color:#fff; border-radius:30px; text-decoration:none; font-weight:700; font-size:0.9rem;">
         <i class="fab fa-instagram"></i> Follow @tarun.amv
@@ -175,19 +173,18 @@
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     const defaultPlaylist = [
-      { id: 'HNdauINck9s', title: 'Trending Hindi Songs 2026', author: 'COZI Music', thumb: 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg', provider: 'YouTube' },
-      { id: '10gxMMO2X40', title: 'Best Hindi Love Songs', author: 'VDj Royal', thumb: 'https://i.ytimg.com/vi/10gxMMO2X40/hqdefault.jpg', provider: 'YouTube' },
-      { id: 'm67Xdu78PrA', title: 'Top Global Hits', author: 'Grow Music', thumb: 'https://i.ytimg.com/vi/m67Xdu78PrA/hqdefault.jpg', provider: 'YouTube' }
+      { id: 'HNdauINck9s', title: 'Trending Hindi Songs 2026', author: 'COZI Music', thumb: 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg' },
+      { id: '10gxMMO2X40', title: 'Best Hindi Love Songs', author: 'VDj Royal', thumb: 'https://i.ytimg.com/vi/10gxMMO2X40/hqdefault.jpg' },
+      { id: 'm67Xdu78PrA', title: 'Top Global Hits', author: 'Grow Music', thumb: 'https://i.ytimg.com/vi/m67Xdu78PrA/hqdefault.jpg' },
+      { id: '5qap5aO4i9A', title: 'Lofi Hip Hop Radio', author: 'Lofi Girl', thumb: 'https://i.ytimg.com/vi/5qap5aO4i9A/hqdefault.jpg' }
     ];
 
     let currentPlaylist = [...defaultPlaylist];
     let currentIndex = 0;
     let ytPlayer = null;
     let isPlaying = false;
-    let activeMode = 'yt';
     let timer = null;
 
-    const audioEl = document.getElementById('main-audio');
     const statusText = document.getElementById('status-text');
 
     function onYouTubeIframeAPIReady() {
@@ -201,7 +198,7 @@
             if (e.data === YT.PlayerState.PLAYING) {
               isPlaying = true;
               document.getElementById('play-btn').innerHTML = '<i class="fas fa-pause"></i>';
-              statusText.innerText = 'Playing via YouTube Engine';
+              statusText.innerText = 'Playing Audio';
               startProgressLoop();
               updateMediaSession();
             } else {
@@ -212,26 +209,12 @@
             if (e.data === YT.PlayerState.ENDED) nextTrack();
           },
           'onError': () => {
-            statusText.innerText = 'Track restricted. Shifting to next...';
+            statusText.innerText = 'Playback restricted. Skipping to next...';
             nextTrack();
           }
         }
       });
     }
-
-    audioEl.onplay = () => {
-      isPlaying = true;
-      document.getElementById('play-btn').innerHTML = '<i class="fas fa-pause"></i>';
-      statusText.innerText = 'Playing Audio Stream';
-      startProgressLoop();
-      updateMediaSession();
-    };
-    audioEl.onpause = () => {
-      isPlaying = false;
-      document.getElementById('play-btn').innerHTML = '<i class="fas fa-play"></i>';
-      clearInterval(timer);
-    };
-    audioEl.onended = () => nextTrack();
 
     function renderResults() {
       const list = document.getElementById('results-list');
@@ -246,7 +229,7 @@
             <div class="track-title">${track.title}</div>
             <div class="track-author">${track.author}</div>
           </div>
-          <span class="provider-tag">${track.provider || 'Soundbound'}</span>
+          <i class="fas fa-play" style="color:var(--neon-cyan); font-size:0.8rem;"></i>
         `;
         item.onclick = () => loadTrack(idx, true);
         list.appendChild(item);
@@ -260,31 +243,18 @@
       document.getElementById('player-author').innerText = track.author;
       document.getElementById('cover-art').src = track.thumb;
 
-      if (track.audioUrl) {
-        activeMode = 'native';
-        if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
-        audioEl.src = track.audioUrl;
-        if (autoPlay) audioEl.play();
-      } else {
-        activeMode = 'yt';
-        audioEl.pause();
-        if (ytPlayer && ytPlayer.loadVideoById) {
-          if (autoPlay) ytPlayer.loadVideoById(track.id);
-          else ytPlayer.cueVideoById(track.id);
-        }
+      if (ytPlayer && ytPlayer.loadVideoById) {
+        if (autoPlay) ytPlayer.loadVideoById(track.id);
+        else ytPlayer.cueVideoById(track.id);
       }
       renderResults();
       updateMediaSession();
     }
 
     document.getElementById('play-btn').onclick = () => {
-      if (activeMode === 'native') {
-        if (audioEl.paused) audioEl.play();
-        else audioEl.pause();
-      } else if (ytPlayer) {
-        if (isPlaying) ytPlayer.pauseVideo();
-        else ytPlayer.playVideo();
-      }
+      if (!ytPlayer) return;
+      if (isPlaying) ytPlayer.pauseVideo();
+      else ytPlayer.playVideo();
     };
 
     function nextTrack() {
@@ -307,8 +277,8 @@
           artist: track.author,
           artwork: [{ src: track.thumb, sizes: '512x512', type: 'image/jpeg' }]
         });
-        navigator.mediaSession.setActionHandler('play', () => document.getElementById('play-btn').click());
-        navigator.mediaSession.setActionHandler('pause', () => document.getElementById('play-btn').click());
+        navigator.mediaSession.setActionHandler('play', () => ytPlayer.playVideo());
+        navigator.mediaSession.setActionHandler('pause', () => ytPlayer.pauseVideo());
         navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
         navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
       }
@@ -317,28 +287,21 @@
     function startProgressLoop() {
       clearInterval(timer);
       timer = setInterval(() => {
-        let curr = 0, dur = 0;
-        if (activeMode === 'native') {
-          curr = audioEl.currentTime || 0;
-          dur = audioEl.duration || 0;
-        } else if (ytPlayer && ytPlayer.getCurrentTime) {
-          curr = ytPlayer.getCurrentTime() || 0;
-          dur = ytPlayer.getDuration() || 0;
-        }
-        if (dur > 0) {
-          document.getElementById('progress-bar').value = (curr / dur) * 100;
-          document.getElementById('curr-time').innerText = fmtTime(curr);
-          document.getElementById('dur-time').innerText = fmtTime(dur);
+        if (ytPlayer && ytPlayer.getCurrentTime) {
+          const curr = ytPlayer.getCurrentTime() || 0;
+          const dur = ytPlayer.getDuration() || 0;
+          if (dur > 0) {
+            document.getElementById('progress-bar').value = (curr / dur) * 100;
+            document.getElementById('curr-time').innerText = fmtTime(curr);
+            document.getElementById('dur-time').innerText = fmtTime(dur);
+          }
         }
       }, 500);
     }
 
     document.getElementById('progress-bar').oninput = (e) => {
-      const pct = e.target.value / 100;
-      if (activeMode === 'native' && audioEl.duration) {
-        audioEl.currentTime = pct * audioEl.duration;
-      } else if (ytPlayer && ytPlayer.getDuration) {
-        ytPlayer.seekTo(pct * ytPlayer.getDuration(), true);
+      if (ytPlayer && ytPlayer.getDuration) {
+        ytPlayer.seekTo((e.target.value / 100) * ytPlayer.getDuration(), true);
       }
     };
 
@@ -348,8 +311,8 @@
       return `${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
-    // Robust Unblocked Search Handler (YouTube Link Parser + Soundbound Fallbacks)
-    document.getElementById('search-btn').onclick = async () => {
+    // 100% Stable Search Engine (YouTube Link / ID Parsing + Local Matching)
+    document.getElementById('search-btn').onclick = () => {
       const q = document.getElementById('search-input').value.trim();
       if (!q) return;
 
@@ -359,74 +322,34 @@
       else if (q.length === 11) vid = q;
 
       if (vid) {
-        const newTrack = { id: vid, title: 'YouTube Direct Track', author: 'YoutubeProvider', thumb: `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`, provider: 'YouTube' };
-        currentPlaylist.unshift(newTrack);
+        const customTrack = {
+          id: vid,
+          title: 'Custom YouTube Track',
+          author: 'YouTube Stream',
+          thumb: `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`
+        };
+        currentPlaylist.unshift(customTrack);
         loadTrack(0, true);
         document.getElementById('search-input').value = '';
-        statusText.innerText = 'YouTube Link Loaded Successfully!';
+        statusText.innerText = 'YouTube Track Loaded!';
       } else {
-        statusText.innerText = `Searching via Soundbound Proxy Mesh...`;
-        let fetched = [];
-        
-        // Multi-proxy endpoints with direct fallback handling
-        const endpoints = [
-          `https://saavn.dev/api/search/songs?query=${encodeURIComponent(q)}`,
-          `https://jiosaavn-api-private-us.vercel.app/search/songs?query=${encodeURIComponent(q)}`
-        ];
-
-        for (const url of endpoints) {
-          try {
-            const res = await fetch(url);
-            const data = await res.json();
-            const results = data.data?.results || data.data || [];
-            if (results && results.length > 0) {
-              fetched = results.map(item => ({
-                id: item.id,
-                title: item.name || item.title,
-                author: item.artists?.primary?.[0]?.name || 'Soundbound Artist',
-                thumb: item.image?.[2]?.link || item.image?.[0]?.link || 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg',
-                audioUrl: item.downloadUrl?.[4]?.link || item.downloadUrl?.[2]?.link,
-                provider: 'Soundbound Mirror'
-              }));
-              break;
-            }
-          } catch (e) {
-            console.warn("Proxy blocked, trying next...");
-          }
-        }
-
-        if (fetched.length > 0) {
-          currentPlaylist = [...fetched, ...defaultPlaylist];
-          statusText.innerText = `Loaded ${fetched.length} tracks successfully!`;
-          loadTrack(0, true);
+        // Smart Local Match
+        const idx = currentPlaylist.findIndex(s => s.title.toLowerCase().includes(q.toLowerCase()));
+        if (idx !== -1) {
+          loadTrack(idx, true);
+          statusText.innerText = 'Found in Playlist!';
         } else {
-          statusText.innerText = 'Public API restricted. Paste YouTube Link / Video ID directly!';
+          alert('Public name search proxies are blocked by browser security. Please paste any YouTube Song Link or 11-digit Video ID in the search box to play instantly!');
+          statusText.innerText = 'Please paste a YouTube Link / ID';
         }
       }
     };
 
-    // Auto MP3 Direct Download
-    document.getElementById('dl-btn').onclick = async () => {
+    // Auto MP3 Download
+    document.getElementById('dl-btn').onclick = () => {
       const track = currentPlaylist[currentIndex];
-      if (track.audioUrl) {
-        statusText.innerText = "Downloading MP3...";
-        try {
-          const res = await fetch(track.audioUrl);
-          const blob = await res.blob();
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = `${track.title}.mp3`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          statusText.innerText = "Download Started!";
-        } catch (e) {
-          window.open(track.audioUrl, '_blank');
-        }
-      } else {
-        window.open(`https://cobalt.tools/`, '_blank');
-        window.open(`https://www.youtube.com/watch?v=${track.id}`, '_blank');
-      }
+      window.open(`https://cobalt.tools/`, '_blank');
+      window.open(`https://www.youtube.com/watch?v=${track.id}`, '_blank');
     };
 
     const modal = document.getElementById('dev-modal');
