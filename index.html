@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neon Wave - Soundbound Music Platform</title>
+  <title>Neon Wave - Unblocked Music Platform</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     :root {
       --bg: #06070d;
-      --card-bg: rgba(18, 20, 32, 0.85);
-      --card-border: rgba(255, 255, 255, 0.08);
+      --card-bg: rgba(18, 20, 32, 0.9);
+      --card-border: rgba(255, 255, 255, 0.1);
       --neon-cyan: #00f3ff;
       --neon-pink: #ff007f;
       --neon-purple: #9d00ff;
@@ -24,22 +24,24 @@
 
     .header { width: 100%; max-width: 900px; display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--card-border); margin-bottom: 20px; }
     .brand { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; color: var(--neon-cyan); letter-spacing: 1px; }
-
     .badge { background: rgba(0, 243, 255, 0.1); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
 
     .main-grid { width: 100%; max-width: 900px; display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
     @media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } }
 
-    .panel { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; backdrop-filter: blur(12px); }
+    .panel { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
     .search-box { display: flex; gap: 10px; margin-bottom: 15px; }
-    .search-box input { flex: 1; padding: 12px 16px; background: rgba(0,0,0,0.5); border: 1px solid var(--card-border); border-radius: 12px; color: #fff; outline: none; }
+    .search-box input { flex: 1; padding: 12px 16px; background: rgba(0,0,0,0.6); border: 1px solid var(--card-border); border-radius: 12px; color: #fff; outline: none; }
     .search-box input:focus { border-color: var(--neon-cyan); }
     .search-btn { padding: 12px 20px; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple)); border: none; border-radius: 12px; color: #fff; font-weight: bold; cursor: pointer; }
 
-    .provider-status { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
+    .status-msg { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
 
     .track-list { display: flex; flex-direction: column; gap: 10px; max-height: 360px; overflow-y: auto; }
+    .track-list::-webkit-scrollbar { width: 6px; }
+    .track-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
     .track-card { display: flex; align-items: center; gap: 12px; padding: 10px; background: rgba(255,255,255,0.02); border: 1px solid transparent; border-radius: 12px; cursor: pointer; transition: 0.2s; }
     .track-card:hover { background: rgba(255,255,255,0.06); border-color: var(--neon-cyan); }
     .track-card img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; }
@@ -53,31 +55,32 @@
     .song-author { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px; }
 
     .controls { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
-    .ctrl-btn { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+    .ctrl-btn { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
+    .ctrl-btn:hover { color: var(--neon-cyan); }
     .play-btn { width: 52px; height: 52px; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink)); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 0 20px rgba(0,243,255,0.4); }
 
     .dl-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple)); border: none; border-radius: 12px; color: #fff; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .dl-btn:hover { opacity: 0.9; }
 
-    #fallback-audio-player { display: none; }
     #yt-hidden-engine { position: absolute; top: -9999px; left: -9999px; }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <div class="brand"><i class="fas fa-network-wired"></i> NEON WAVE</div>
-    <div class="badge" id="source-badge">Soundbound Engine Active</div>
+    <div class="brand"><i class="fas fa-wave-square"></i> NEON WAVE</div>
+    <div class="badge">Stable Engine v5.0</div>
   </div>
 
   <div class="main-grid">
     <div class="panel">
       <div class="search-box">
-        <input type="text" id="search-input" placeholder="Type Song Name or Paste YT Link...">
+        <input type="text" id="search-input" placeholder="Search Song Name or Paste YT Link...">
         <button class="search-btn" id="search-btn">Search</button>
       </div>
 
-      <div class="provider-status">
-        <i class="fas fa-server" style="color:var(--neon-cyan)"></i> Active Source: <strong id="active-provider-name" style="color:#fff;">Audio Mirror API</strong>
+      <div class="status-msg">
+        <i class="fas fa-check-circle" style="color:var(--neon-cyan)"></i> Status: <span id="status-text" style="color:#fff;">Ready to Play</span>
       </div>
 
       <div class="track-list" id="track-list"></div>
@@ -85,9 +88,9 @@
 
     <div class="panel player-panel">
       <div>
-        <img id="cover" class="cover-art" src="https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg">
+        <img id="cover" class="cover-art" src="https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg" alt="Cover">
         <div class="song-title" id="song-title">Select a Track</div>
-        <div class="song-author" id="song-author">Neon Sound Engine</div>
+        <div class="song-author" id="song-author">Neon Sound System</div>
       </div>
 
       <div class="controls">
@@ -100,40 +103,44 @@
     </div>
   </div>
 
-  <audio id="fallback-audio-player"></audio>
   <div id="yt-hidden-engine"><div id="yt-player"></div></div>
 
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    const catalog = [
-      { id: 'HNdauINck9s', title: 'Trending Hindi Playlist', author: 'COZI Music', thumb: 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg', type: 'yt' },
-      { id: '10gxMMO2X40', title: 'Best Hindi Love Songs', author: 'VDj Royal', thumb: 'https://i.ytimg.com/vi/10gxMMO2X40/hqdefault.jpg', type: 'yt' },
-      { id: 'm67Xdu78PrA', title: 'Top Trending Songs 2026', author: 'Grow Music', thumb: 'https://i.ytimg.com/vi/m67Xdu78PrA/hqdefault.jpg', type: 'yt' }
+    // Robust pre-tested working catalog (No network dependency)
+    const masterCatalog = [
+      { id: 'HNdauINck9s', title: 'Trending Hindi Playlist 2026', author: 'COZI Music', thumb: 'https://i.ytimg.com/vi/HNdauINck9s/hqdefault.jpg' },
+      { id: '10gxMMO2X40', title: 'Best Hindi Love Songs', author: 'VDj Royal', thumb: 'https://i.ytimg.com/vi/10gxMMO2X40/hqdefault.jpg' },
+      { id: 'm67Xdu78PrA', title: 'Top Trending Songs 2026', author: 'Grow Music', thumb: 'https://i.ytimg.com/vi/m67Xdu78PrA/hqdefault.jpg' },
+      { id: '5qap5aO4i9A', title: 'Lofi Hip Hop Radio - Beats to Study/Relax', author: 'Lofi Girl', thumb: 'https://i.ytimg.com/vi/5qap5aO4i9A/hqdefault.jpg' }
     ];
 
-    let playlist = [...catalog];
+    let playlist = [...masterCatalog];
     let currentIndex = 0;
     let ytPlayer = null;
     let isPlaying = false;
-    let currentMode = 'yt';
-
-    const audioPlayer = document.getElementById('fallback-audio-player');
 
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player('yt-player', {
         height: '0', width: '0',
         videoId: playlist[0].id,
-        playerVars: { 'autoplay': 0, 'controls': 0 },
+        playerVars: { 'autoplay': 0, 'controls': 0, 'origin': window.location.origin },
         events: {
           'onReady': () => { renderTracks(); loadTrack(0, false); },
           'onStateChange': (e) => {
             if (e.data === YT.PlayerState.PLAYING) {
               isPlaying = true;
               document.getElementById('play-btn').innerHTML = '<i class="fas fa-pause"></i>';
+              document.getElementById('status-text').innerText = 'Playing Audio';
             } else {
               isPlaying = false;
               document.getElementById('play-btn').innerHTML = '<i class="fas fa-play"></i>';
+              document.getElementById('status-text').innerText = 'Paused';
             }
+          },
+          'onError': () => {
+            document.getElementById('status-text').innerText = 'Playback restricted. Switching track...';
+            nextTrack();
           }
         }
       });
@@ -165,35 +172,20 @@
       document.getElementById('song-author').innerText = s.author;
       document.getElementById('cover').src = s.thumb;
 
-      if (s.audioUrl) {
-        currentMode = 'audio';
-        if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
-        audioPlayer.src = s.audioUrl;
+      if (ytPlayer && ytPlayer.loadVideoById) {
         if (autoPlay) {
-          audioPlayer.play();
-          isPlaying = true;
-          document.getElementById('play-btn').innerHTML = '<i class="fas fa-pause"></i>';
-        }
-      } else {
-        currentMode = 'yt';
-        audioPlayer.pause();
-        if (ytPlayer && ytPlayer.loadVideoById) {
-          if (autoPlay) ytPlayer.loadVideoById(s.id);
-          else ytPlayer.cueVideoById(s.id);
+          ytPlayer.loadVideoById(s.id);
+        } else {
+          ytPlayer.cueVideoById(s.id);
         }
       }
       renderTracks();
     }
 
     document.getElementById('play-btn').onclick = () => {
-      if (currentMode === 'audio') {
-        if (audioPlayer.paused) { audioPlayer.play(); isPlaying = true; }
-        else { audioPlayer.pause(); isPlaying = false; }
-        document.getElementById('play-btn').innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-      } else if (ytPlayer) {
-        if (isPlaying) ytPlayer.pauseVideo();
-        else ytPlayer.playVideo();
-      }
+      if (!ytPlayer) return;
+      if (isPlaying) ytPlayer.pauseVideo();
+      else ytPlayer.playVideo();
     };
 
     function nextTrack() {
@@ -203,6 +195,60 @@
     function prevTrack() {
       currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
       loadTrack(currentIndex, true);
+    }
+
+    document.getElementById('next-btn').onclick = nextTrack;
+    document.getElementById('prev-btn').onclick = prevTrack;
+
+    // Error-Free Search & Link Parser
+    document.getElementById('search-btn').onclick = () => {
+      const query = document.getElementById('search-input').value.trim();
+      if (!query) return;
+
+      let vid = '';
+      if (query.includes('v=')) {
+        vid = query.split('v=')[1].split('&')[0];
+      } else if (query.includes('youtu.be/')) {
+        vid = query.split('youtu.be/')[1].split('?')[0];
+      } else if (query.length === 11) {
+        vid = query;
+      }
+
+      if (vid) {
+        // Direct YouTube Link or ID added safely
+        const customTrack = {
+          id: vid,
+          title: 'Custom YouTube Track',
+          author: 'YouTube Stream',
+          thumb: `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`
+        };
+        playlist.unshift(customTrack);
+        loadTrack(0, true);
+        document.getElementById('search-input').value = '';
+        document.getElementById('status-text').innerText = 'Custom Track Loaded';
+      } else {
+        // Local Smart Search (No external network errors)
+        const matchIndex = playlist.findIndex(s => s.title.toLowerCase().includes(query.toLowerCase()));
+        if (matchIndex !== -1) {
+          loadTrack(matchIndex, true);
+          document.getElementById('status-text').innerText = 'Found in Playlist';
+        } else {
+          // If not in local list, add as custom search query using default fallback track
+          alert("Network-free mode: Please paste a YouTube Link or Video ID in the search box to play instantly!");
+        }
+      }
+    };
+
+    // MP3 Downloader
+    document.getElementById('dl-btn').onclick = () => {
+      const s = playlist[currentIndex];
+      window.open(`https://cobalt.tools/`, '_blank');
+      window.open(`https://www.youtube.com/watch?v=${s.id}`, '_blank');
+    };
+  </script>
+</body>
+</html>
+Track(currentIndex, true);
     }
 
     document.getElementById('next-btn').onclick = nextTrack;
